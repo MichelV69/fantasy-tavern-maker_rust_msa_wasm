@@ -31,7 +31,7 @@ fn main() {
 
     #[derive(Debug)]
     struct PBHouse {
-        name: String,
+        name: (NameVerb, NameNoun),
         mood: String,
         lighting: String,
         smells: String,
@@ -45,14 +45,28 @@ fn main() {
         cost_of_goods_index:String
     }
 
+    #[derive(Debug, RandGen, Display)]
     enum NameVerb{
         Waltzing,Checkered,Lazy,Silver,Saucy,Flirting
     }
+    #[derive(Debug, RandGen, Display)]
     enum NameNoun {
         Werebear,Cockrel,Hen,Dragon,Wench,Dryad
     }
 
     impl PBHouse {
+    fn new() -> Self {
+        PBHouse {
+            name : (random(), random()),
 
+        };
+
+        fn get_name(self) -> String {
+        format!("the {{self.name.0}}{{self.name.1}}")
+        };
     }
+
+    let mut pub_and_bed_house = PBHouse::new();
+    pub_and_bed_house.get_name;
+}
 }
