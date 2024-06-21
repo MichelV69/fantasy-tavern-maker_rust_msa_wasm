@@ -5,8 +5,10 @@ edition = "2021"
 
 [dependencies]
 inquire = "0.7.5"
+rand = "0.8.5"
 rand_derive2 = "0.1.21"
 random = "0.14.0"
 sqlx = "0.7.4"
+strum = "0.26.2"
 strum_macros = "0.26.4"
 yew = "0.21.0"

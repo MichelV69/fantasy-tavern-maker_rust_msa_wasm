@@ -10,28 +10,27 @@
 //use rayon::prelude::*;
 //use chrono::prelude::{DateTime, Local};
 
+// inquire crate, a terrific command line interaction crate that allows
+//      us to build interactive menus, auto-completing lists, input
+//      lines with good readline support and more.
 // extern crate inquire;
+// use inquire::Text;
 
+use std::str::FromStr;
 use strum_macros::Display;
 use strum_macros::EnumString;
-use std::str::FromStr;
-use inquire::Text;
+
+// use rand::random;
+use rand::prelude::*;
 use rand_derive2::RandGen;
 
 fn main() {
     println!("Hello, world!");
 
     #[derive(Debug)]
-    struct EstablishmentQuality
-    {
-        quality : String,
-        rooms  : String,
-        meals : String,
-    }
-
-    #[derive(Debug)]
     struct PBHouse {
-        name: (NameVerb, NameNoun),
+        name_verb: NameVerb,
+        name_noun: NameNoun,
         mood: String,
         lighting: String,
         smells: String,
@@ -42,31 +41,59 @@ fn main() {
         establishment_history_notes: String,
         redlight_services: String,
         establishment_quality: EstablishmentQuality,
-        cost_of_goods_index:String
+        cost_of_goods_index: String,
     }
 
-    #[derive(Debug, RandGen, Display)]
-    enum NameVerb{
-        Waltzing,Checkered,Lazy,Silver,Saucy,Flirting
-    }
-    #[derive(Debug, RandGen, Display)]
-    enum NameNoun {
-        Werebear,Cockrel,Hen,Dragon,Wench,Dryad
+    trait Name {
+        fn name(&self) -> String;
     }
 
     impl PBHouse {
-    fn new() -> Self {
-        PBHouse {
-            name : (random(), random()),
-
-        };
-
-        fn get_name(self) -> String {
-        format!("the {{self.name.0}}{{self.name.1}}")
-        };
+        fn name(&self) -> String {
+            format!("the {{name_verb}}{{name_noun}}")
+        }
     }
 
-    let mut pub_and_bed_house = PBHouse::new();
-    pub_and_bed_house.get_name;
-}
+    #[derive(Debug, RandGen, Display, EnumString, Eq, PartialEq)]
+    enum NameVerb {
+        Waltzing,
+        Checkered,
+        Lazy,
+        Silver,
+        Saucy,
+        Flirting,
+    }
+
+    #[derive(Debug, RandGen, Display, EnumString, Eq, PartialEq)]
+    enum NameNoun {
+        Werebear,
+        Cockrel,
+        Hen,
+        Dragon,
+        Wench,
+        Dryad,
+    }
+
+    #[derive(Debug)]
+    struct EstablishmentQuality {
+        quality: String,
+        rooms: String,
+        meals: String,
+    }
+
+    trait New {
+        fn new() -> PBHouse;
+    }
+
+    impl PBHouse {
+        fn new() -> Self {
+            PBHouse {
+                name_verb: random(),
+                name_noun: random(),
+            };
+        }
+    }
+    //    let mut pub_and_bed_house = PBHouse::new();
+    //    pub_and_bed_house.get_name;
+    // --- eof ---
 }
