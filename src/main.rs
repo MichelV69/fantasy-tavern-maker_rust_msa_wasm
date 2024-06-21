@@ -6,16 +6,17 @@
 use strum_macros::Display;
 use strum_macros::EnumString;
 
+use is_vowel::*;
 use rand::prelude::*;
 use rand_derive2::RandGen;
 
 fn main() {
     println!("--- start of code ---");
 
+    // ---
     #[derive(Debug)]
     struct PBHouse {
-        name_verb: NameVerb,
-        name_noun: NameNoun,
+        name: String,
         mood: String,
         // lighting: String,
         // smells: String,
@@ -38,6 +39,8 @@ fn main() {
             format!("the {{name_verb}}{{name_noun}}")
         }
     }
+
+    // ---
 
     #[derive(Debug, RandGen, Display, EnumString, Eq, PartialEq)]
     enum NameVerb {
@@ -91,6 +94,16 @@ fn main() {
         Waves,
     }
 
+    fn get_name() -> String {
+        let verb: NameVerb = rand::random();
+        let noun: NameNoun = rand::random();
+
+        let mut result = format!("{} {}", verb.to_string(), noun.to_string());
+        result
+    }
+
+    // ---
+
     trait New {
         fn new() -> PBHouse;
     }
@@ -98,12 +111,13 @@ fn main() {
     impl PBHouse {
         fn new() -> Self {
             PBHouse {
-                name_verb: random(),
-                name_noun: random(),
+                name: get_name(),
                 mood: get_mood(),
             }
         }
     }
+
+    // ---
 
     #[derive(Debug, RandGen, Display, EnumString, Eq, PartialEq)]
     enum MoodData {
@@ -129,17 +143,18 @@ fn main() {
         let current_mood: MoodData = rand::random();
         let words = current_mood.to_string();
 
-        let mut mood_string = "".to_string();
+        let mut result = "".to_string();
         for c in words.chars() {
-            mood_string = if c.to_string() == c.to_lowercase().to_string() {
-                format!("{}{}", mood_string, c)
+            result = if c.to_string() == c.to_lowercase().to_string() {
+                format!("{}{}", result, c)
             } else {
-                format!("{} {}", mood_string, c.to_lowercase().to_string())
+                format!("{} {}", result, c.to_lowercase().to_string())
             }
         }
 
-        mood_string
+        result
     }
+    // ---
 
     trait StatSheet {
         fn stat_data() -> String;
@@ -148,8 +163,20 @@ fn main() {
     impl PBHouse {
         fn stat_data(&self) -> Vec<String> {
             let mut pb_house_desc: Vec<String> = Vec::new();
-            pb_house_desc.push(format!("the {} {}", self.name_verb, self.name_noun));
-            pb_house_desc.push(format!("has a reputation for a {} mood.", self.mood));
+            pb_house_desc.push(format!("the {}", self.name));
+            let mut first_char = self
+                .mood
+                .to_string()
+                .chars()
+                .nth(0)
+                .expect("This should be a single character");
+            let prep = if first_char.is_romance_vowel() {
+                "an"
+            } else {
+                "a"
+            };
+
+            pb_house_desc.push(format!("has a reputation for {prep} {} mood.", self.mood));
             return pb_house_desc;
         }
     }
@@ -163,7 +190,7 @@ fn main() {
     }
 
     // --- main code ---
-    let mut pub_and_bed_house = PBHouse::new();
+    let pub_and_bed_house = PBHouse::new();
     println!("--- start of output ---");
 
     for line in pub_and_bed_house.stat_data() {
