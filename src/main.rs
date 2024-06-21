@@ -3,10 +3,6 @@
 #![allow(unused_imports)]
 #![allow(unused_mut)]
 
-use std::error::Error;
-use std::fmt;
-use std::slice::Iter;
-use std::str::FromStr;
 use strum_macros::Display;
 use strum_macros::EnumString;
 
@@ -95,12 +91,6 @@ fn main() {
         Waves,
     }
 
-    #[derive(Debug)]
-    struct EstablishmentQuality {
-        quality: String,
-        rooms: String,
-        meals: String,
-    }
     trait New {
         fn new() -> PBHouse;
     }
@@ -115,8 +105,40 @@ fn main() {
         }
     }
 
+    #[derive(Debug, RandGen, Display, EnumString, Eq, PartialEq)]
+    enum MoodData {
+        Jovial,
+        Relaxing,
+        Smoky,
+        Erudite,
+        Loud,
+        Subdued,
+        Rowdy,
+        Seedy,
+        Shady,
+        Busy,
+        LowerClass,
+        MiddleClass,
+        UpperClass,
+        MerchantFriendly,
+        Dour,
+        Flirty,
+    }
+
     fn get_mood() -> String {
-        "this is a Big Mood".to_string()
+        let current_mood: MoodData = rand::random();
+        let words = current_mood.to_string();
+
+        let mut mood_string = "".to_string();
+        for c in words.chars() {
+            mood_string = if c.to_string() == c.to_lowercase().to_string() {
+                format!("{}{}", mood_string, c)
+            } else {
+                format!("{} {}", mood_string, c.to_lowercase().to_string())
+            }
+        }
+
+        mood_string
     }
 
     trait StatSheet {
@@ -124,13 +146,22 @@ fn main() {
     }
 
     impl PBHouse {
-        fn stat_data(&self) -> Vec<String>{
+        fn stat_data(&self) -> Vec<String> {
             let mut pb_house_desc: Vec<String> = Vec::new();
             pb_house_desc.push(format!("the {} {}", self.name_verb, self.name_noun));
             pb_house_desc.push(format!("has a reputation for a {} mood.", self.mood));
-            return pb_house_desc
+            return pb_house_desc;
         }
     }
+
+    // ---
+    #[derive(Debug)]
+    struct EstablishmentQuality {
+        quality: String,
+        rooms: String,
+        meals: String,
+    }
+
     // --- main code ---
     let mut pub_and_bed_house = PBHouse::new();
     println!("--- start of output ---");
