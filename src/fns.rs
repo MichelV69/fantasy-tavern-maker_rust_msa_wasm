@@ -31,7 +31,6 @@ pub fn enum_to_text(s: String) -> String {
 }
 
 // ---
-
 pub fn get_name() -> String {
     let verb: NameVerb = random();
     let noun: NameNoun = random();
@@ -49,14 +48,15 @@ pub fn get_lighting() -> String {
     let adjective: LightingAdjectives = random();
     let verb: LightingVerb = random();
     let source: LightingSources = random();
-    let result = format!(" The main area is {} {} by {}.", adjective, verb, source);
+    let result = format!(" The main area is {} {} by {}", adjective, verb, source);
     trim_whitespace(enum_to_text(result))
 }
 
-// --
-
 pub fn get_smells() -> String {
-    "full of smells".to_string()
+    let sniff1: FirstSmell = random();
+    let sniff2: SecondSmell = random();
+    let result = format!("{} and {}", sniff1, sniff2);
+    trim_whitespace(enum_to_text(result))
 }
 
 // --- eof ---

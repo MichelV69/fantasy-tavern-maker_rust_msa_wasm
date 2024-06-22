@@ -10,13 +10,15 @@ use is_vowel::*;
 use rand::prelude::*;
 use rand_derive2::RandGen;
 
+use tracing::info;
+
 use std::fmt;
 
 mod fns;
 use fns::*;
 
 fn main() {
-    println!("--- start of code ---");
+    info!("--- start of code ---");
 
     // ---
     #[derive(Debug)]
@@ -25,7 +27,7 @@ fn main() {
         mood: String,
         lighting: String,
         smells: String,
-        // size: String,
+        size: PBHouseSize,
         // posted_sign: String,
         // specialty_drink: String,
         // specialty_food: String,
@@ -54,6 +56,13 @@ fn main() {
                 mood: get_mood(),
                 lighting: get_lighting(),
                 smells: get_smells(),
+                size: PBHouseSize {
+                    size_description: SizeList::Small,
+                    table_count: 1,
+                    common_bed_type: BedTypeList::Hammock,
+                    common_bed_count: 1,
+                    private_room_count: 1,
+                },
             }
         }
     }
@@ -91,28 +100,59 @@ fn main() {
             };
             pb_house_desc.push(format!(" has a reputation for {prep} {} mood.", self.mood));
             // ---
-            pb_house_desc.push(format!(" You can see that {} .", self.lighting));
+            pb_house_desc.push(format!(" You can see that {}.", self.lighting));
             // ---
-            pb_house_desc.push(format!(" The air here is full of the {}.", self.smells));
+            pb_house_desc.push(format!(
+                " The air here is full of the smells of {}.",
+                self.smells
+            ));
             // ---
             pb_house_desc
         }
     }
 
     // ---
-    #[derive(Debug)]
-    struct EstablishmentQuality {
-        quality: String,
-        rooms: String,
-        meals: String,
+    #[derive(Debug, Display)]
+    enum SizeList {
+        Tiny,
+        Small,
+        Modest,
+        Large,
+        Massive,
     }
 
+    #[derive(Debug, Display)]
+    enum BedTypeList {
+        Hammock,
+    }
+
+    #[derive(Debug)]
+    struct PBHouseSize {
+        size_description: SizeList,
+        table_count: i16,
+        common_bed_type: BedTypeList,
+        common_bed_count: i16,
+        private_room_count: i8,
+    }
+
+    // fn get_pb_house_size() -> PBHouseSize {
+    //
+    // }
+
+    // ---
+    // #[derive(Debug)]
+    // struct EstablishmentQuality {
+    //     quality: String,
+    //     rooms: String,
+    //     meals: String,
+    // }
+
     // --- main code ---
-    println!("--- start of output ---");
+    info!("--- start of output ---");
 
     let pub_and_bed_house = PBHouse::new();
     println!("|| {} |", pub_and_bed_house);
 
-    println!("--- end of output ---");
+    info!("--- end of output ---");
     // --- eof ---
 }
