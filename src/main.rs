@@ -56,13 +56,7 @@ fn main() {
                 mood: get_mood(),
                 lighting: get_lighting(),
                 smells: get_smells(),
-                size: PBHouseSize {
-                    size_description: SizeList::Small,
-                    table_count: 1,
-                    common_bed_type: BedTypeList::Hammock,
-                    common_bed_count: 1,
-                    private_room_count: 1,
-                },
+                size: get_pb_house_size(),
             }
         }
     }
@@ -112,7 +106,7 @@ fn main() {
     }
 
     // ---
-    #[derive(Debug, Display)]
+    #[derive(Debug, Display, RandGen)]
     enum SizeList {
         Tiny,
         Small,
@@ -135,9 +129,18 @@ fn main() {
         private_room_count: i8,
     }
 
-    // fn get_pb_house_size() -> PBHouseSize {
-    //
-    // }
+    fn get_pb_house_size() -> PBHouseSize {
+        let pb_size: SizeList = random();
+        //let pb_tables:
+
+        PBHouseSize {
+            size_description: pb_size,
+            table_count: 1,
+            common_bed_type: BedTypeList::Hammock,
+            common_bed_count: 1,
+            private_room_count: 1,
+        }
+    }
 
     // ---
     // #[derive(Debug)]
