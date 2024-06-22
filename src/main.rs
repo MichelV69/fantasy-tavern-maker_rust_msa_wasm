@@ -10,15 +10,34 @@ use is_vowel::*;
 use rand::prelude::*;
 use rand_derive2::RandGen;
 
+use std::fmt;
+
 fn main() {
     println!("--- start of code ---");
+
+    pub fn trim_whitespace(s: String) -> String {
+        let words: Vec<_> = s.split_whitespace().collect();
+        words.join(" ")
+    }
+
+    pub fn enum_to_text(s: String) -> String {
+        let mut result = "".to_string();
+        for c in s.chars() {
+            result = if c.to_string() == c.to_lowercase().to_string() {
+                format!("{}{}", result, c)
+            } else {
+                format!("{} {}", result, c.to_lowercase().to_string())
+            };
+        }
+        result
+    }
 
     // ---
     #[derive(Debug)]
     struct PBHouse {
         name: String,
         mood: String,
-        // lighting: String,
+        lighting: String,
         // smells: String,
         // size: String,
         // posted_sign: String,
@@ -98,8 +117,7 @@ fn main() {
         let verb: NameVerb = rand::random();
         let noun: NameNoun = rand::random();
 
-        let mut result = format!("{} {}", verb.to_string(), noun.to_string());
-        result
+        format!("'{} {}'", verb.to_string(), noun.to_string())
     }
 
     // ---
@@ -113,6 +131,7 @@ fn main() {
             PBHouse {
                 name: get_name(),
                 mood: get_mood(),
+                lighting: get_lighting(),
             }
         }
     }
@@ -141,18 +160,8 @@ fn main() {
 
     fn get_mood() -> String {
         let current_mood: MoodData = rand::random();
-        let words = current_mood.to_string();
-
-        let mut result = "".to_string();
-        for c in words.chars() {
-            result = if c.to_string() == c.to_lowercase().to_string() {
-                format!("{}{}", result, c)
-            } else {
-                format!("{} {}", result, c.to_lowercase().to_string())
-            }
-        }
-
-        result
+        let result = current_mood.to_string();
+        trim_whitespace(enum_to_text(result))
     }
     // ---
 
@@ -160,10 +169,20 @@ fn main() {
         fn stat_data() -> String;
     }
 
+    impl fmt::Display for PBHouse {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            for line in &self.stat_data() {
+                write!(f, "{}", line)?;
+            }
+            Ok(())
+        }
+    }
+
     impl PBHouse {
         fn stat_data(&self) -> Vec<String> {
             let mut pb_house_desc: Vec<String> = Vec::new();
-            pb_house_desc.push(format!("the {}", self.name));
+            pb_house_desc.push(format!("The {}", self.name));
+            // ---
             let mut first_char = self
                 .mood
                 .to_string()
@@ -175,10 +194,41 @@ fn main() {
             } else {
                 "a"
             };
-
-            pb_house_desc.push(format!("has a reputation for {prep} {} mood.", self.mood));
+            pb_house_desc.push(format!(" has a reputation for {prep} {} mood.", self.mood));
+            // ---
+            pb_house_desc.push(format!(" You can see that {} ", self.lighting));
+            // ---
             return pb_house_desc;
         }
+    }
+    // ----
+    #[derive(Display, RandGen)]
+    enum LightingAdjectives {
+        Brightly,
+        Clearly,
+        Evenly,
+        Dimly,
+        Shadowly,
+    }
+    #[derive(Display, RandGen)]
+    enum LightingVerb {
+        Lit,
+        Illuminated,
+    }
+    #[derive(Display, RandGen)]
+    enum LightingSources {
+        Candles,
+        AFireplace,
+        OilLamps,
+        MagicOrbsAndCrystals,
+    }
+
+    fn get_lighting() -> String {
+        let adjective: LightingAdjectives = rand::random();
+        let verb: LightingVerb = rand::random();
+        let source: LightingSources = rand::random();
+        let result = format!(" The main area is {} {} by {}.", adjective, verb, source);
+        trim_whitespace(enum_to_text(result))
     }
 
     // ---
@@ -190,12 +240,11 @@ fn main() {
     }
 
     // --- main code ---
-    let pub_and_bed_house = PBHouse::new();
     println!("--- start of output ---");
 
-    for line in pub_and_bed_house.stat_data() {
-        println!("-- {:#?} --", line);
-    }
+    let pub_and_bed_house = PBHouse::new();
+    println!("|| {} |", pub_and_bed_house);
+
     println!("--- end of output ---");
     // --- eof ---
 }
