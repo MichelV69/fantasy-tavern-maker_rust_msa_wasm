@@ -24,7 +24,7 @@ pub fn enum_to_text(s: String) -> String {
         result = if c.to_string() == c.to_lowercase().to_string() {
             format!("{}{}", result, c)
         } else {
-            format!("{} {}", result, c.to_lowercase().to_string())
+            format!("{} {}", result, c.to_lowercase())
         };
     }
     result
@@ -36,7 +36,7 @@ pub fn get_name() -> String {
     let verb: NameVerb = random();
     let noun: NameNoun = random();
 
-    format!("'{} {}'", verb.to_string(), noun.to_string())
+    format!("'{} {}'", verb, noun)
 }
 
 pub fn get_mood() -> String {

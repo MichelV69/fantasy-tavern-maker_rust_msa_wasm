@@ -42,15 +42,11 @@ fn main() {
 
     impl PBHouse {
         fn name(&self) -> String {
-            format!("the {{name_verb}}{{name_noun}}")
+            "the {{name_verb}}{{name_noun}}".to_string()
         }
     }
 
     // ---
-    trait New {
-        fn new() -> PBHouse;
-    }
-
     impl PBHouse {
         fn new() -> Self {
             PBHouse {
@@ -99,7 +95,7 @@ fn main() {
             // ---
             pb_house_desc.push(format!(" The air here is full of the {}.", self.smells));
             // ---
-            return pb_house_desc;
+            pb_house_desc
         }
     }
 
