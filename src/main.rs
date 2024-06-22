@@ -12,6 +12,9 @@ use rand_derive2::RandGen;
 
 use std::fmt;
 
+mod enums;
+use enums::*;
+
 fn main() {
     println!("--- start of code ---");
 
@@ -38,7 +41,7 @@ fn main() {
         name: String,
         mood: String,
         lighting: String,
-        // smells: String,
+        smells: String,
         // size: String,
         // posted_sign: String,
         // specialty_drink: String,
@@ -59,63 +62,9 @@ fn main() {
         }
     }
 
-    // ---
-
-    #[derive(Debug, RandGen, Display, EnumString, Eq, PartialEq)]
-    enum NameVerb {
-        Waltzing,
-        Checkered,
-        Lazy,
-        Silver,
-        Saucy,
-        Flirting,
-        Blue,
-        Red,
-        Green,
-        Yellow,
-        Fickle,
-        Roaring,
-        Carousing,
-        Melting,
-        Drifting,
-        Spring,
-        Winter,
-        Summer,
-        Autumn,
-        Pouring,
-        Heaving,
-    }
-
-    #[derive(Debug, RandGen, Display, EnumString, Eq, PartialEq)]
-    enum NameNoun {
-        Werebear,
-        Cockrel,
-        Hen,
-        Dragon,
-        Wench,
-        Dryad,
-        Sky,
-        Tide,
-        Meadow,
-        Sun,
-        Fortune,
-        Waters,
-        Bard,
-        Curmudgeon,
-        Crystal,
-        Mongrel,
-        Ice,
-        Tempest,
-        Snows,
-        Draft,
-        Harvest,
-        Chalice,
-        Waves,
-    }
-
     fn get_name() -> String {
-        let verb: NameVerb = rand::random();
-        let noun: NameNoun = rand::random();
+        let verb: NameVerb = random();
+        let noun: NameNoun = random();
 
         format!("'{} {}'", verb.to_string(), noun.to_string())
     }
@@ -132,34 +81,13 @@ fn main() {
                 name: get_name(),
                 mood: get_mood(),
                 lighting: get_lighting(),
+                smells: get_smells(),
             }
         }
     }
 
-    // ---
-
-    #[derive(Debug, RandGen, Display, EnumString, Eq, PartialEq)]
-    enum MoodData {
-        Jovial,
-        Relaxing,
-        Smoky,
-        Erudite,
-        Loud,
-        Subdued,
-        Rowdy,
-        Seedy,
-        Shady,
-        Busy,
-        LowerClass,
-        MiddleClass,
-        UpperClass,
-        MerchantFriendly,
-        Dour,
-        Flirty,
-    }
-
     fn get_mood() -> String {
-        let current_mood: MoodData = rand::random();
+        let current_mood: MoodData = random();
         let result = current_mood.to_string();
         trim_whitespace(enum_to_text(result))
     }
@@ -196,41 +124,26 @@ fn main() {
             };
             pb_house_desc.push(format!(" has a reputation for {prep} {} mood.", self.mood));
             // ---
-            pb_house_desc.push(format!(" You can see that {} ", self.lighting));
+            pb_house_desc.push(format!(" You can see that {} .", self.lighting));
+            // ---
+            pb_house_desc.push(format!(" The air here is full of the {}.", self.smells));
             // ---
             return pb_house_desc;
         }
     }
-    // ----
-    #[derive(Display, RandGen)]
-    enum LightingAdjectives {
-        Brightly,
-        Clearly,
-        Evenly,
-        Dimly,
-        Shadowly,
-    }
-    #[derive(Display, RandGen)]
-    enum LightingVerb {
-        Lit,
-        Illuminated,
-    }
-    #[derive(Display, RandGen)]
-    enum LightingSources {
-        Candles,
-        AFireplace,
-        OilLamps,
-        MagicOrbsAndCrystals,
-    }
 
     fn get_lighting() -> String {
-        let adjective: LightingAdjectives = rand::random();
-        let verb: LightingVerb = rand::random();
-        let source: LightingSources = rand::random();
+        let adjective: LightingAdjectives = random();
+        let verb: LightingVerb = random();
+        let source: LightingSources = random();
         let result = format!(" The main area is {} {} by {}.", adjective, verb, source);
         trim_whitespace(enum_to_text(result))
     }
 
+    // ---
+    fn get_smells() -> String {
+        "full of smells".to_string()
+    }
     // ---
     #[derive(Debug)]
     struct EstablishmentQuality {
