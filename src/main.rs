@@ -12,28 +12,11 @@ use rand_derive2::RandGen;
 
 use std::fmt;
 
-mod enums;
-use enums::*;
+mod fns;
+use fns::*;
 
 fn main() {
     println!("--- start of code ---");
-
-    pub fn trim_whitespace(s: String) -> String {
-        let words: Vec<_> = s.split_whitespace().collect();
-        words.join(" ")
-    }
-
-    pub fn enum_to_text(s: String) -> String {
-        let mut result = "".to_string();
-        for c in s.chars() {
-            result = if c.to_string() == c.to_lowercase().to_string() {
-                format!("{}{}", result, c)
-            } else {
-                format!("{} {}", result, c.to_lowercase().to_string())
-            };
-        }
-        result
-    }
 
     // ---
     #[derive(Debug)]
@@ -52,6 +35,7 @@ fn main() {
         // cost_of_goods_index: String,
     }
 
+    // ---
     trait Name {
         fn name(&self) -> String;
     }
@@ -62,15 +46,7 @@ fn main() {
         }
     }
 
-    fn get_name() -> String {
-        let verb: NameVerb = random();
-        let noun: NameNoun = random();
-
-        format!("'{} {}'", verb.to_string(), noun.to_string())
-    }
-
     // ---
-
     trait New {
         fn new() -> PBHouse;
     }
@@ -86,13 +62,7 @@ fn main() {
         }
     }
 
-    fn get_mood() -> String {
-        let current_mood: MoodData = random();
-        let result = current_mood.to_string();
-        trim_whitespace(enum_to_text(result))
-    }
     // ---
-
     trait StatSheet {
         fn stat_data() -> String;
     }
@@ -106,6 +76,7 @@ fn main() {
         }
     }
 
+    // ---
     impl PBHouse {
         fn stat_data(&self) -> Vec<String> {
             let mut pb_house_desc: Vec<String> = Vec::new();
@@ -132,18 +103,6 @@ fn main() {
         }
     }
 
-    fn get_lighting() -> String {
-        let adjective: LightingAdjectives = random();
-        let verb: LightingVerb = random();
-        let source: LightingSources = random();
-        let result = format!(" The main area is {} {} by {}.", adjective, verb, source);
-        trim_whitespace(enum_to_text(result))
-    }
-
-    // ---
-    fn get_smells() -> String {
-        "full of smells".to_string()
-    }
     // ---
     #[derive(Debug)]
     struct EstablishmentQuality {

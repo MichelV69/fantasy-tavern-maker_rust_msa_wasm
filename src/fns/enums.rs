@@ -107,3 +107,33 @@ pub enum LightingSources {
     OilLamps,
     MagicOrbsAndCrystals,
 }
+
+#[derive(Display, RandGen)]
+pub enum FirstSmell {
+    WoodSmoke,
+    Spices,
+    Perfumes,
+    WearyTravellers,
+    StrongDrink,
+    Tobacco,
+    SpicedTobacco,
+    Shisha,
+    FreshLinen,
+    HotBread,
+}
+
+#[derive(Display, RandGen)]
+pub enum SecondSmell {
+    FreshPastries,
+    FoodsCooking,
+    TheOutsideSurroundings,
+    TheOcean,
+    TheForests,
+    FermentingWine,
+    Hops,
+    FermentingRye,
+    HotSpicedCider,
+    BakingSweets,
+}
+
+// --- eof ---
