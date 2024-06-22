@@ -17,6 +17,9 @@ use std::fmt;
 mod fns;
 use fns::*;
 
+mod dicebag;
+use dicebag::roll_string;
+
 fn main() {
     info!("--- start of code ---");
 
@@ -131,7 +134,7 @@ fn main() {
 
     fn get_pb_house_size() -> PBHouseSize {
         let pb_size: SizeList = random();
-        //let pb_tables:
+        let pb_tables = dicebag::roll_string("2d4"); // .expect("Couldn't roll dice!")
 
         PBHouseSize {
             size_description: pb_size,
