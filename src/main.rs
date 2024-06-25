@@ -18,7 +18,7 @@ mod fns;
 use fns::*;
 
 mod dicebag;
-use dicebag::roll_string;
+use dicebag::*;
 
 fn main() {
     info!("--- start of code ---");
@@ -104,6 +104,11 @@ fn main() {
                 self.smells
             ));
             // ---
+            pb_house_desc.push(format!(
+                " There are {} tables in the common room.",
+                self.size.table_count
+            ));
+            // ---
             pb_house_desc
         }
     }
@@ -126,19 +131,20 @@ fn main() {
     #[derive(Debug)]
     struct PBHouseSize {
         size_description: SizeList,
-        table_count: i16,
+        table_count: i8,
         common_bed_type: BedTypeList,
-        common_bed_count: i16,
+        common_bed_count: i8,
         private_room_count: i8,
     }
 
     fn get_pb_house_size() -> PBHouseSize {
         let pb_size: SizeList = random();
-        let pb_tables = dicebag::roll_string("2d4"); // .expect("Couldn't roll dice!")
+        let pb_tables_roll = dicebag::tower::DiceResult::from_string("2d4");
+        let pb_tables = pb_tables_roll.get_total();
 
         PBHouseSize {
             size_description: pb_size,
-            table_count: 1,
+            table_count: pb_tables,
             common_bed_type: BedTypeList::Hammock,
             common_bed_count: 1,
             private_room_count: 1,
