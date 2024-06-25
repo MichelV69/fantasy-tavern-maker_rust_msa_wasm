@@ -53,9 +53,16 @@ pub fn roll_string(request: &str) -> DiceResult {
         "die_size[{:#?}] die_count[{:#?}] mod_list[{:#?}]",
         die_size, die_count, mod_list
     );
+
+    let requested_size = match die_size.parse::<i8>().unwrap() {
+        2 => DiceBag::Coin,
+        4 => DiceBag::D4,
+        _ => panic!("Unsupported die-size description."),
+    };
+
     let new_roll_request = {
         RollRequest {
-            die_requested: DiceBag::Coin,
+            die_requested: requested_size,
             number_rolls: die_count,
             modifer_list: mod_list,
         }
@@ -100,6 +107,7 @@ fn process_roll_request(request: RollRequest) -> DiceResult {
 #[cfg(test)]
 mod tests {
     use super::*;
+
     #[test]
     fn does_flip_coin() {
         let request: String = "1d2".to_string();
@@ -109,6 +117,33 @@ mod tests {
 
         debug_assert!(roll_value <= 2);
         debug_assert!(roll_value >= 1);
+    }
+
+    #[test]
+    fn rolls_1d4() {
+        let request: String = "1d4".to_string();
+        let resulting_roll = roll_string(&request);
+        let roll_value: i8 = resulting_roll.total_roll;
+        event!(Level::INFO, "roll_value[{}]", roll_value);
+
+        println!("roll_value[{}]", roll_value);
+
+        debug_assert!(roll_value <= 4);
+        debug_assert!(roll_value >= 1);
+    }
+
+    #[test]
+    fn rolls_20d4() {
+        let request: String = "2d4".to_string();
+        let resulting_roll = roll_string(&request);
+        let roll_value: i8 = resulting_roll.total_roll;
+        event!(Level::INFO, "roll_value[{}]", roll_value);
+
+        println!("roll_value[{}]", roll_value);
+        for this_roll in resulting_roll.rolls {
+            debug_assert!(this_roll <= 4);
+            debug_assert!(this_roll >= 1);
+        }
     }
 }
 // ---- end of file ----
