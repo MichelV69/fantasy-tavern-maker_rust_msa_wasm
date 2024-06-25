@@ -1,10 +1,10 @@
 // ---- start of file ----
 use rand::distributions::Distribution;
 use rand::distributions::Uniform;
-use rand::prelude::ThreadRng;
-use rand::Rng;
+use rand::prelude::*;
 use std::str::Split;
-use tracing::error;
+use tracing::event;
+use tracing::Level;
 
 struct RollRequest {
     die_requested: DiceBag,
@@ -32,13 +32,27 @@ pub fn roll_string(request: &str) -> DiceResult {
     let res2: Vec<String> = res1[1].split("[-+]").map(|s| s.to_string()).collect();
     let die_size = &res2[0];
 
-    let stop = res2.len() - 1;
-    let res3: Vec<_> = res2[1..stop].to_vec();
     let mut mod_list: Vec<i8> = [].to_vec();
-    for (k, v) in res3.iter().enumerate() {
-        mod_list.push(v.parse::<i8>().unwrap());
+    let stop = res2.len() - 1;
+    if stop > 1 {
+        event!(Level::INFO, "No modifiers passed");
+        let res3: Vec<_> = res2[1..stop].to_vec();
+        for (k, v) in res3.iter().enumerate() {
+            mod_list.push(v.parse::<i8>().unwrap());
+        }
     }
 
+    event!(
+        Level::INFO,
+        "die_size[{:#?}] die_count[{:#?}] mod_list[{:#?}]",
+        die_size,
+        die_count,
+        mod_list
+    );
+    println!(
+        "die_size[{:#?}] die_count[{:#?}] mod_list[{:#?}]",
+        die_size, die_count, mod_list
+    );
     let new_roll_request = {
         RollRequest {
             die_requested: DiceBag::Coin,
@@ -47,7 +61,6 @@ pub fn roll_string(request: &str) -> DiceResult {
         }
     };
 
-    // todo!("write roll processor now that we have formatted request");
     process_roll_request(new_roll_request)
 }
 
@@ -55,25 +68,47 @@ fn process_roll_request(request: RollRequest) -> DiceResult {
     let mut rng = rand::thread_rng();
     let mut roll_list: Vec<i8> = [].to_vec();
 
-    let die2 = Uniform::from(1..2);
-    let die4 = Uniform::from(1..4);
-    let die6 = Uniform::from(1..6);
-    let die8 = Uniform::from(1..8);
+    let die2 = Uniform::new(0, 2);
+    let die4 = Uniform::new(0, 4);
+    let die6 = Uniform::new(0, 6);
+    let die8 = Uniform::new(0, 8);
 
-    for index in 1..request.number_rolls {
+    for index in 0..request.number_rolls {
         let roll_val: i8 = match request.die_requested {
-            DiceBag::Coin | DiceBag::D2 => die2.sample(&mut rng),
-            DiceBag::D4 => die4.sample(&mut rng),
-            _ => panic!("uknown die type"),
+            DiceBag::Coin | DiceBag::D2 => rng.sample::<i8, _>(die2) + 1,
+            DiceBag::D4 => rng.sample::<i8, _>(die4) + 1,
         };
+        event!(Level::INFO, "roll_val[{}]", roll_val);
+
         roll_list.push(roll_val);
     }
 
+    let mut roll_total = 0;
+    for roll in &roll_list {
+        roll_total = roll_total + roll;
+    }
+
     DiceResult {
-        request: "".to_string(),
-        rolls: [0].to_vec(),
+        request: "no_roll".to_string(),
+        rolls: roll_list,
         total_mod: 0,
-        total_roll: -1,
+        total_roll: roll_total,
+    }
+}
+
+// ---- start of tests ----
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn does_flip_coin() {
+        let request: String = "1d2".to_string();
+        let resulting_roll = roll_string(&request);
+        let roll_value: i8 = resulting_roll.total_roll;
+        event!(Level::INFO, "roll_value[{}]", roll_value);
+
+        debug_assert!(roll_value <= 2);
+        debug_assert!(roll_value >= 1);
     }
 }
 // ---- end of file ----
