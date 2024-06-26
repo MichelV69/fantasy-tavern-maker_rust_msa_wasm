@@ -126,6 +126,9 @@ fn main() {
     #[derive(Debug, Display)]
     enum BedTypeList {
         Hammock,
+        BunkBeds,
+        SingleBeds,
+        TentBeds,
     }
 
     #[derive(Debug)]
@@ -139,16 +142,95 @@ fn main() {
 
     fn get_pb_house_size() -> PBHouseSize {
         let pb_size: SizeList = random();
-        let pb_tables_roll = dicebag::tower::DiceResult::from_string("2d4");
-        let pb_tables = pb_tables_roll.get_total();
+        // --- pb_tables_roll dice should be based on pb_size
+        let mut our_pbhouse: PBHouseSize = match pb_size {
+            SizeList::Tiny => {
+                let pb_tables_roll = dicebag::tower::DiceResult::from_string("2d4");
+                let pb_tables = pb_tables_roll.get_total();
 
-        PBHouseSize {
-            size_description: pb_size,
-            table_count: pb_tables,
-            common_bed_type: BedTypeList::Hammock,
-            common_bed_count: 1,
-            private_room_count: 1,
-        }
+                let pb_beds_roll = dicebag::tower::DiceResult::from_string("1d4");
+                let pb_beds = pb_beds_roll.get_total();
+
+                PBHouseSize {
+                    size_description: pb_size,
+                    table_count: pb_tables,
+                    common_bed_type: BedTypeList::Hammock,
+                    common_bed_count: pb_beds,
+                    private_room_count: 0,
+                }
+            }
+            SizeList::Small => {
+                let pb_tables_roll = dicebag::tower::DiceResult::from_string("3d4");
+                let pb_tables = pb_tables_roll.get_total();
+
+                let pb_beds_roll = dicebag::tower::DiceResult::from_string("2d4");
+                let pb_beds = pb_beds_roll.get_total();
+
+                let pb_priv_room_roll = dicebag::tower::DiceResult::from_string("1d4");
+                let pb_priv_rooms = pb_priv_room_roll.get_total();
+                PBHouseSize {
+                    size_description: pb_size,
+                    table_count: pb_tables,
+                    common_bed_type: BedTypeList::BunkBeds,
+                    common_bed_count: pb_beds,
+                    private_room_count: pb_priv_rooms,
+                }
+            }
+            SizeList::Modest => {
+                let pb_tables_roll = dicebag::tower::DiceResult::from_string("4d6");
+                let pb_tables = pb_tables_roll.get_total();
+
+                let pb_beds_roll = dicebag::tower::DiceResult::from_string("3d6");
+                let pb_beds = pb_beds_roll.get_total();
+
+                let pb_priv_room_roll = dicebag::tower::DiceResult::from_string("2d6");
+                let pb_priv_rooms = pb_priv_room_roll.get_total();
+                PBHouseSize {
+                    size_description: pb_size,
+                    table_count: pb_tables,
+                    common_bed_type: BedTypeList::SingleBeds,
+                    common_bed_count: pb_beds,
+                    private_room_count: pb_priv_rooms,
+                }
+            }
+            SizeList::Large => {
+                let pb_tables_roll = dicebag::tower::DiceResult::from_string("5d6");
+                let pb_tables = pb_tables_roll.get_total();
+
+                let pb_beds_roll = dicebag::tower::DiceResult::from_string("4d6");
+                let pb_beds = pb_beds_roll.get_total();
+
+                let pb_priv_room_roll = dicebag::tower::DiceResult::from_string("3d6");
+                let pb_priv_rooms = pb_priv_room_roll.get_total();
+                PBHouseSize {
+                    size_description: pb_size,
+                    table_count: pb_tables,
+                    common_bed_type: BedTypeList::TentBeds,
+                    common_bed_count: pb_beds,
+                    private_room_count: pb_priv_rooms,
+                }
+            }
+            SizeList::Massive => {
+                let pb_tables_roll = dicebag::tower::DiceResult::from_string("7d8");
+                let pb_tables = pb_tables_roll.get_total();
+
+                let pb_beds_roll = dicebag::tower::DiceResult::from_string("6d8");
+                let pb_beds = pb_beds_roll.get_total();
+
+                let pb_priv_room_roll = dicebag::tower::DiceResult::from_string("4d8");
+                let pb_priv_rooms = pb_priv_room_roll.get_total();
+                PBHouseSize {
+                    size_description: pb_size,
+                    table_count: pb_tables,
+                    common_bed_type: BedTypeList::TentBeds,
+                    common_bed_count: pb_beds,
+                    private_room_count: pb_priv_rooms,
+                }
+            }
+        };
+        // ---
+
+        our_pbhouse
     }
 
     // ---

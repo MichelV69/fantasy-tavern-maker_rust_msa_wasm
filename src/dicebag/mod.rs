@@ -76,8 +76,7 @@ pub mod tower {
                 }
             };
 
-            let result = process_roll_request(new_roll_request);
-            result
+            process_roll_request(new_roll_request)
         }
     } // impl DiceResult
 
@@ -102,7 +101,7 @@ pub mod tower {
 
         let mut roll_total = 0;
         for roll in &roll_list {
-            roll_total = roll_total + roll;
+            roll_total += roll;
         }
 
         DiceResult {
