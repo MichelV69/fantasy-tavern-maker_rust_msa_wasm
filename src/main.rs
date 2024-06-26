@@ -36,7 +36,7 @@ fn main() {
         // specialty_food: String,
         // establishment_history_notes: String,
         // redlight_services: String,
-        // establishment_quality: EstablishmentQuality,
+        establishment_quality: EstablishmentQuality,
         // cost_of_goods_index: String,
     }
 
@@ -60,6 +60,7 @@ fn main() {
                 lighting: get_lighting(),
                 smells: get_smells(),
                 size: get_pb_house_size(),
+                establishment_quality: get_establishment_quality(),
             }
         }
     }
@@ -82,7 +83,6 @@ fn main() {
     impl PBHouse {
         fn stat_data(&self) -> Vec<String> {
             let mut pb_house_desc: Vec<String> = Vec::new();
-            pb_house_desc.push(format!("The {}", self.name));
             // ---
             let mut first_char = self
                 .mood
@@ -90,24 +90,54 @@ fn main() {
                 .chars()
                 .nth(0)
                 .expect("This should be a single character");
+
             let prep = if first_char.is_romance_vowel() {
                 "an"
             } else {
                 "a"
             };
-            pb_house_desc.push(format!(" has a reputation for {prep} {} mood.", self.mood));
-            // ---
-            pb_house_desc.push(format!(" You can see that {}.", self.lighting));
-            // ---
+
+            pb_house_desc.push(
+                "\n-----                        Player Blurb                        -----"
+                    .to_string(),
+            );
+            pb_house_desc.push("\n \n ".to_string());
             pb_house_desc.push(format!(
-                " The air here is full of the smells of {}.",
-                self.smells
+                " The local Pub and Bed House for travellers is the {}.",
+                self.name
             ));
-            // ---
             pb_house_desc.push(format!(
-                " There are {} tables in the common room.",
+                " The {}-quality establishment would be considered {}, with {} tables.",
+                trim_whitespace(enum_string_to_phase(
+                    self.establishment_quality.level.to_string()
+                )),
+                trim_whitespace(enum_string_to_phase(self.size.size_description.to_string())),
                 self.size.table_count
             ));
+            pb_house_desc.push(format!(
+                " It has {} {} in the common room and {} private rooms.",
+                self.size.common_bed_count,
+                enum_string_to_phase(enum_string_to_phase(self.size.common_bed_type.to_string())),
+                self.size.private_room_count
+            ));
+            pb_house_desc.push(format!(
+                " Rooms are {} per day, and meals are {} per day.",
+                self.establishment_quality.rooms, self.establishment_quality.meals
+            ));
+            pb_house_desc.push("\n \n ".to_string());
+            pb_house_desc.push(format!(
+                " As you enter, the air is full of the scents of {}.",
+                self.smells
+            ));
+            pb_house_desc.push(format!(
+                " It seems to be {prep} {} place, {}.",
+                self.mood, self.lighting
+            ));
+            // pb_house_desc.push(format!(" A sign just outside the door says 'No Spell Casting!'.",xx);
+            // pb_house_desc.push(format!(" lore ipsum",xx);
+            // ---
+            // ---
+
             // ---
             pb_house_desc
         }
@@ -142,8 +172,7 @@ fn main() {
 
     fn get_pb_house_size() -> PBHouseSize {
         let pb_size: SizeList = random();
-        // --- pb_tables_roll dice should be based on pb_size
-        let mut our_pbhouse: PBHouseSize = match pb_size {
+        let our_pbhouse: PBHouseSize = match pb_size {
             SizeList::Tiny => {
                 let pb_tables_roll = dicebag::tower::DiceResult::from_string("2d4");
                 let pb_tables = pb_tables_roll.get_total();
@@ -234,12 +263,40 @@ fn main() {
     }
 
     // ---
-    // #[derive(Debug)]
-    // struct EstablishmentQuality {
-    //     quality: String,
-    //     rooms: String,
-    //     meals: String,
-    // }
+    #[derive(Debug)]
+    struct EstablishmentQuality {
+        level: EstablishmentQualityLevel,
+        rooms: String,
+        meals: String,
+    }
+
+    #[derive(Debug, Display, RandGen)]
+    enum EstablishmentQualityLevel {
+        Squalid,
+        Poor,
+        Modest,
+        Comfortable,
+        Wealthy,
+        Aristocratic,
+    }
+
+    fn get_establishment_quality() -> EstablishmentQuality {
+        let establishment_quality_level: EstablishmentQualityLevel = random();
+        let cost_data = match establishment_quality_level {
+            EstablishmentQualityLevel::Squalid => ("7cp", "3cp"),
+            EstablishmentQualityLevel::Poor => ("1sp", "6cp"),
+            EstablishmentQualityLevel::Modest => ("5sp", "3sp"),
+            EstablishmentQualityLevel::Comfortable => ("8sp", "5sp"),
+            EstablishmentQualityLevel::Wealthy => ("2gp", "8sp"),
+            EstablishmentQualityLevel::Aristocratic => ("4gp", "2gp"),
+        };
+
+        EstablishmentQuality {
+            level: establishment_quality_level,
+            rooms: cost_data.0.to_string(),
+            meals: cost_data.1.to_string(),
+        }
+    }
 
     // --- main code ---
     info!("--- start of output ---");

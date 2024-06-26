@@ -18,7 +18,7 @@ pub fn trim_whitespace(s: String) -> String {
     words.join(" ")
 }
 
-pub fn enum_to_text(s: String) -> String {
+pub fn enum_string_to_phase(s: String) -> String {
     let mut result = "".to_string();
     for c in s.chars() {
         result = if c.to_string() == c.to_lowercase().to_string() {
@@ -41,7 +41,7 @@ pub fn get_name() -> String {
 pub fn get_mood() -> String {
     let current_mood: MoodData = random();
     let result = current_mood.to_string();
-    trim_whitespace(enum_to_text(result))
+    trim_whitespace(enum_string_to_phase(result))
 }
 
 pub fn get_lighting() -> String {
@@ -49,14 +49,14 @@ pub fn get_lighting() -> String {
     let verb: LightingVerb = random();
     let source: LightingSources = random();
     let result = format!(" The main area is {} {} by {}", adjective, verb, source);
-    trim_whitespace(enum_to_text(result))
+    trim_whitespace(enum_string_to_phase(result))
 }
 
 pub fn get_smells() -> String {
     let sniff1: FirstSmell = random();
     let sniff2: SecondSmell = random();
     let result = format!("{} and {}", sniff1, sniff2);
-    trim_whitespace(enum_to_text(result))
+    trim_whitespace(enum_string_to_phase(result))
 }
 
 // --- eof ---
