@@ -17,6 +17,8 @@ pub mod tower {
         Coin,
         D2,
         D4,
+        D6,
+        D8,
     }
 
     pub struct DiceResult {
@@ -65,6 +67,8 @@ pub mod tower {
             let requested_size = match die_size.parse::<i8>().unwrap() {
                 2 => DiceBag::Coin,
                 4 => DiceBag::D4,
+                6 => DiceBag::D6,
+                8 => DiceBag::D8,
                 _ => panic!(
                     "{}",
                     format!("Unsupported die-size description {}.", request)
@@ -93,10 +97,13 @@ pub mod tower {
         let die8 = Uniform::new(0, 8);
 
         for index in 0..request.number_rolls {
-            let roll_val: i8 = match request.die_requested {
-                DiceBag::Coin | DiceBag::D2 => rng.sample::<i8, _>(die2) + 1,
-                DiceBag::D4 => rng.sample::<i8, _>(die4) + 1,
+            let low_roll_val: i8 = match request.die_requested {
+                DiceBag::Coin | DiceBag::D2 => rng.sample::<i8, _>(die2),
+                DiceBag::D4 => rng.sample::<i8, _>(die4),
+                DiceBag::D6 => rng.sample::<i8, _>(die6),
+                DiceBag::D8 => rng.sample::<i8, _>(die8),
             };
+            let roll_val = low_roll_val + 1;
             event!(Level::INFO, "roll_val[{}]", roll_val);
 
             roll_list.push(roll_val);
