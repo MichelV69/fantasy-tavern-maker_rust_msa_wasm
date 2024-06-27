@@ -30,8 +30,8 @@ pub fn enum_string_to_phase(s: String) -> String {
     result
 }
 
-pub fn tidy() -> (s: String) -> String {
-     trim_whitespace(enum_string_to_phase(s))
+pub fn tidy(s: String) -> String {
+    trim_whitespace(enum_string_to_phase(s))
 }
 
 // ---
@@ -39,7 +39,7 @@ pub fn get_name() -> String {
     let verb: NameVerb = random();
     let noun: NameNoun = random();
 
-    format!("'{} {}'", verb, noun)
+    format!("'{} {}'", tidy(verb.to_string()), tidy(noun.to_string()))
 }
 
 pub fn get_mood() -> String {
@@ -52,14 +52,23 @@ pub fn get_lighting() -> String {
     let adjective: LightingAdjectives = random();
     let verb: LightingVerb = random();
     let source: LightingSources = random();
-    let result = format!(" The main area is {} {} by {}", adjective, verb, source);
-    tidy(result)
+    let result = format!(
+        " The main area is {} {} by {}",
+        tidy(adjective.to_string()),
+        tidy(verb.to_string()),
+        tidy(source.to_string())
+    );
+    result
 }
 
 pub fn get_smells() -> String {
     let sniff1: FirstSmell = random();
     let sniff2: SecondSmell = random();
-    let result = format!("{} and {}", trim_whitespace(enum_string_to_phase(sniff1)), trim_whitespace(enum_string_to_phase(sniff2)));
+    let result = format!(
+        "{} and {}",
+        tidy(sniff1.to_string()),
+        tidy(sniff2.to_string())
+    );
 
     result
 }
@@ -68,7 +77,12 @@ pub fn get_posted_sign() -> String {
     let sign_location: PostedSignLocation = random();
     let sign_message: PostedSignMessage = random();
 
-    let result = format!(" A sign {} says '{}'.", trim_whitespace(enum_string_to_phase(sign_location)), trim_whitespace(enum_string_to_phase(sign_message)));
+    let result = format!(
+        " A sign {} says '{}'.",
+        tidy(sign_location.to_string()),
+        tidy(sign_message.to_string())
+    );
+    result
 }
 
 // --- eof ---
