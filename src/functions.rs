@@ -10,9 +10,9 @@ use std::fmt;
 use strum_macros::Display;
 use strum_macros::EnumString;
 
-use crate::DiceBag::Tower::*;
-use crate::Enums::List::*;
-use crate::Structs::List::*;
+use crate::dice_bag::Tower::*;
+use crate::enums::List::*;
+use crate::structs::List::*;
 
 pub fn trim_whitespace(s: String) -> String {
     let words: Vec<_> = s.split_whitespace().collect();

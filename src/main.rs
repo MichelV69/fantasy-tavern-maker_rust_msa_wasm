@@ -15,15 +15,15 @@ use std::fmt;
 use tracing::info;
 
 // ---
-mod DiceBag;
-mod Enums;
-mod Structs;
-mod fns;
+mod dice_bag;
+mod enums;
+mod structs;
+mod functions;
 
-use crate::Enums::List::*;
-use crate::Structs::List::*;
-use fns::*;
-use DiceBag::*;
+use crate::enums::List::*;
+use crate::structs::List::*;
+use functions::*;
+use dice_bag::*;
 
 fn main() {
     info!("--- start of code ---");
@@ -196,10 +196,10 @@ fn main() {
         let pb_size: SizeList = random();
         let our_pbhouse: PBHouseSize = match pb_size {
             SizeList::Tiny => {
-                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("2d4");
+                let pb_tables_roll = dice_bag::Tower::DiceResult::from_string("2d4");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("1d4");
+                let pb_beds_roll = dice_bag::Tower::DiceResult::from_string("1d4");
                 let pb_beds = pb_beds_roll.get_total();
 
                 PBHouseSize {
@@ -211,13 +211,13 @@ fn main() {
                 }
             }
             SizeList::Small => {
-                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("3d4");
+                let pb_tables_roll = dice_bag::Tower::DiceResult::from_string("3d4");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("2d4");
+                let pb_beds_roll = dice_bag::Tower::DiceResult::from_string("2d4");
                 let pb_beds = pb_beds_roll.get_total();
 
-                let pb_priv_room_roll = DiceBag::Tower::DiceResult::from_string("1d4");
+                let pb_priv_room_roll = dice_bag::Tower::DiceResult::from_string("1d4");
                 let pb_priv_rooms = pb_priv_room_roll.get_total();
                 PBHouseSize {
                     size_description: pb_size,
@@ -228,13 +228,13 @@ fn main() {
                 }
             }
             SizeList::Modest => {
-                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("4d6");
+                let pb_tables_roll = dice_bag::Tower::DiceResult::from_string("4d6");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("3d6");
+                let pb_beds_roll = dice_bag::Tower::DiceResult::from_string("3d6");
                 let pb_beds = pb_beds_roll.get_total();
 
-                let pb_priv_room_roll = DiceBag::Tower::DiceResult::from_string("2d6");
+                let pb_priv_room_roll = dice_bag::Tower::DiceResult::from_string("2d6");
                 let pb_priv_rooms = pb_priv_room_roll.get_total();
                 PBHouseSize {
                     size_description: pb_size,
@@ -245,13 +245,13 @@ fn main() {
                 }
             }
             SizeList::Large => {
-                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("5d6");
+                let pb_tables_roll = dice_bag::Tower::DiceResult::from_string("5d6");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("4d6");
+                let pb_beds_roll = dice_bag::Tower::DiceResult::from_string("4d6");
                 let pb_beds = pb_beds_roll.get_total();
 
-                let pb_priv_room_roll = DiceBag::Tower::DiceResult::from_string("3d6");
+                let pb_priv_room_roll = dice_bag::Tower::DiceResult::from_string("3d6");
                 let pb_priv_rooms = pb_priv_room_roll.get_total();
                 PBHouseSize {
                     size_description: pb_size,
@@ -262,13 +262,13 @@ fn main() {
                 }
             }
             SizeList::Massive => {
-                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("7d8");
+                let pb_tables_roll = dice_bag::Tower::DiceResult::from_string("7d8");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("6d8");
+                let pb_beds_roll = dice_bag::Tower::DiceResult::from_string("6d8");
                 let pb_beds = pb_beds_roll.get_total();
 
-                let pb_priv_room_roll = DiceBag::Tower::DiceResult::from_string("4d8");
+                let pb_priv_room_roll = dice_bag::Tower::DiceResult::from_string("4d8");
                 let pb_priv_rooms = pb_priv_room_roll.get_total();
                 PBHouseSize {
                     size_description: pb_size,
