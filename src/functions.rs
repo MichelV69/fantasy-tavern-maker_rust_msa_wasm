@@ -11,9 +11,9 @@ use std::fmt;
 use strum_macros::Display;
 use strum_macros::EnumString;
 
-use crate::dice_bag::Tower::*;
 use crate::enums::List::*;
 use crate::structs::List::*;
+use crate::Tower::DiceResult;
 
 pub fn trim_whitespace(s: String) -> String {
     let words: Vec<_> = s.split_whitespace().collect();
@@ -130,6 +130,116 @@ pub fn get_posted_sign() -> String {
         sign_message_text.to_capitalized()
     );
     result
+}
+
+pub fn get_pb_house_size() -> PBHouseSize {
+    let pb_size: SizeList = random();
+    let our_pbhouse: PBHouseSize = match pb_size {
+        SizeList::Tiny => {
+            let pb_tables_roll = DiceResult::from_string("2d4");
+            let pb_tables = pb_tables_roll.get_total();
+
+            let pb_beds_roll = DiceResult::from_string("1d4");
+            let pb_beds = pb_beds_roll.get_total();
+
+            PBHouseSize {
+                size_description: pb_size,
+                table_count: pb_tables,
+                common_bed_type: BedTypeList::Hammocks,
+                common_bed_count: pb_beds,
+                private_room_count: 0,
+            }
+        }
+        SizeList::Small => {
+            let pb_tables_roll = DiceResult::from_string("3d4");
+            let pb_tables = pb_tables_roll.get_total();
+
+            let pb_beds_roll = DiceResult::from_string("2d4");
+            let pb_beds = pb_beds_roll.get_total();
+
+            let pb_priv_room_roll = DiceResult::from_string("1d4");
+            let pb_priv_rooms = pb_priv_room_roll.get_total();
+            PBHouseSize {
+                size_description: pb_size,
+                table_count: pb_tables,
+                common_bed_type: BedTypeList::BunkBeds,
+                common_bed_count: pb_beds,
+                private_room_count: pb_priv_rooms,
+            }
+        }
+        SizeList::Modest => {
+            let pb_tables_roll = DiceResult::from_string("4d6");
+            let pb_tables = pb_tables_roll.get_total();
+
+            let pb_beds_roll = DiceResult::from_string("3d6");
+            let pb_beds = pb_beds_roll.get_total();
+
+            let pb_priv_room_roll = DiceResult::from_string("2d6");
+            let pb_priv_rooms = pb_priv_room_roll.get_total();
+            PBHouseSize {
+                size_description: pb_size,
+                table_count: pb_tables,
+                common_bed_type: BedTypeList::SingleBeds,
+                common_bed_count: pb_beds,
+                private_room_count: pb_priv_rooms,
+            }
+        }
+        SizeList::Large => {
+            let pb_tables_roll = DiceResult::from_string("5d6");
+            let pb_tables = pb_tables_roll.get_total();
+
+            let pb_beds_roll = DiceResult::from_string("4d6");
+            let pb_beds = pb_beds_roll.get_total();
+
+            let pb_priv_room_roll = DiceResult::from_string("3d6");
+            let pb_priv_rooms = pb_priv_room_roll.get_total();
+            PBHouseSize {
+                size_description: pb_size,
+                table_count: pb_tables,
+                common_bed_type: BedTypeList::TentBeds,
+                common_bed_count: pb_beds,
+                private_room_count: pb_priv_rooms,
+            }
+        }
+        SizeList::Massive => {
+            let pb_tables_roll = DiceResult::from_string("7d8");
+            let pb_tables = pb_tables_roll.get_total();
+
+            let pb_beds_roll = DiceResult::from_string("6d8");
+            let pb_beds = pb_beds_roll.get_total();
+
+            let pb_priv_room_roll = DiceResult::from_string("4d8");
+            let pb_priv_rooms = pb_priv_room_roll.get_total();
+            PBHouseSize {
+                size_description: pb_size,
+                table_count: pb_tables,
+                common_bed_type: BedTypeList::TentBeds,
+                common_bed_count: pb_beds,
+                private_room_count: pb_priv_rooms,
+            }
+        }
+    };
+    // ---
+
+    our_pbhouse
+}
+
+pub fn get_establishment_quality() -> EstablishmentQuality {
+    let establishment_quality_level: EstablishmentQualityLevel = random();
+    let cost_data = match establishment_quality_level {
+        EstablishmentQualityLevel::Squalid => ("7cp", "3cp"),
+        EstablishmentQualityLevel::Poor => ("1sp", "6cp"),
+        EstablishmentQualityLevel::Modest => ("5sp", "3sp"),
+        EstablishmentQualityLevel::Comfortable => ("8sp", "5sp"),
+        EstablishmentQualityLevel::Wealthy => ("2gp", "8sp"),
+        EstablishmentQualityLevel::Aristocratic => ("4gp", "2gp"),
+    };
+
+    EstablishmentQuality {
+        level: establishment_quality_level,
+        rooms: cost_data.0.to_string(),
+        meals: cost_data.1.to_string(),
+    }
 }
 
 pub fn get_house_drink(eql: EstablishmentQualityLevel) -> HouseDrink {

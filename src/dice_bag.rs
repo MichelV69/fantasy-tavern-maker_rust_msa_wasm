@@ -19,6 +19,9 @@ pub mod Tower {
         D4,
         D6,
         D8,
+        D10,
+        D12,
+        D20,
     }
 
     pub struct DiceResult {
@@ -36,11 +39,20 @@ pub mod Tower {
             self.total_roll
         }
         pub fn from_string(request: &str) -> DiceResult {
+            // eg 5d12+6
+
+            //5 d12+6
             let res1: Vec<String> = request.split('d').map(|s| s.to_string()).collect();
             let die_count = res1[0].parse::<i8>().unwrap();
 
-            let res2: Vec<String> = res1[1].split("[-+]").map(|s| s.to_string()).collect();
-            let die_size = &res2[0];
+            let res2: Vec<String> = res1[1]
+                .replace('d', "")
+                .split(&['+', '-'])
+                .map(|s| s.to_string())
+                .collect();
+
+            let mut panic_reason = format!("no strings allowed '{:#?}'.", res2[0]);
+            let die_size = &res2[0].parse::<i8>().expect(&panic_reason);
 
             let mut mod_list: Vec<i8> = [].to_vec();
             let stop = res2.len() - 1;
@@ -60,12 +72,18 @@ pub mod Tower {
                 mod_list
             );
 
-            let panic_reason = format!("Unsupported die-size description {}.", request);
-            let requested_size = match die_size.parse::<i8>().expect(&panic_reason) {
+            let mut panic_reason = format!(
+                "Unsupported die-size description c{} d{}  m'{:#?}'.",
+                die_count, die_size, mod_list
+            );
+            let requested_size = match die_size {
                 2 => DiceBag::Coin,
                 4 => DiceBag::D4,
                 6 => DiceBag::D6,
                 8 => DiceBag::D8,
+                10 => DiceBag::D10,
+                12 => DiceBag::D12,
+                20 => DiceBag::D20,
                 _ => panic!("{}", &panic_reason),
             };
 
@@ -89,6 +107,9 @@ pub mod Tower {
         let die4 = Uniform::new(0, 4);
         let die6 = Uniform::new(0, 6);
         let die8 = Uniform::new(0, 8);
+        let die10 = Uniform::new(0, 10);
+        let die12 = Uniform::new(0, 12);
+        let die20 = Uniform::new(0, 20);
 
         for index in 0..request.number_rolls {
             let low_roll_val: i8 = match request.die_requested {
@@ -96,6 +117,9 @@ pub mod Tower {
                 DiceBag::D4 => rng.sample::<i8, _>(die4),
                 DiceBag::D6 => rng.sample::<i8, _>(die6),
                 DiceBag::D8 => rng.sample::<i8, _>(die8),
+                DiceBag::D10 => rng.sample::<i8, _>(die10),
+                DiceBag::D12 => rng.sample::<i8, _>(die12),
+                DiceBag::D20 => rng.sample::<i8, _>(die20),
             };
             let roll_val = low_roll_val + 1;
             event!(Level::INFO, "roll_val[{}]", roll_val);
@@ -151,8 +175,8 @@ mod tests {
         let request: String = "2d4".to_string();
         let resulting_roll = roll_string(&request);
         let roll_value: i8 = resulting_roll.total_roll;
-        event!(Level::INFO, "roll_value[{}]", roll_value);
 
+        event!(Level::INFO, "roll_value[{}]", roll_value);
         println!("roll_value[{}]", roll_value);
         for this_roll in resulting_roll.rolls {
             debug_assert!(this_roll <= 4);
