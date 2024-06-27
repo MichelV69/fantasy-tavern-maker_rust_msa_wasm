@@ -6,6 +6,7 @@
 use is_vowel::*;
 use rand::prelude::*;
 use rand_derive2::RandGen;
+use std::cmp::*;
 use std::fmt;
 use strum_macros::Display;
 use strum_macros::EnumString;
@@ -131,15 +132,42 @@ pub fn get_posted_sign() -> String {
     result
 }
 
-pub fn get_house_drink() -> HouseDrink {
+pub fn get_house_drink(eql: EstablishmentQualityLevel) -> HouseDrink {
     let desc: String = "HouseDrink Desc".to_string();
     let price: String = "11cp".to_string();
     HouseDrink { desc, price }
 }
 
-pub fn get_house_dish() -> HouseDish {
-    let desc: String = "HouseDish Desc".to_string();
-    let price: String = "13cp".to_string();
+pub fn get_house_dish(eql: EstablishmentQualityLevel) -> HouseDish {
+    let how_cooked: HouseDishHowCooked = random();
+    let what_cooked: HouseDishWhatCooked = random();
+    let side_dish: HouseDishWhatSide = random();
+
+    let desc: String = format!(
+        "{} {} served with {}",
+        tidy(how_cooked.to_string()),
+        tidy(what_cooked.to_string()),
+        tidy(side_dish.to_string())
+    );
+    let cost_of_goods = get_cost_of_goods(eql);
+    //coin_type, cost_minimum, dice_to_roll
+    let roll_value = DiceResult::from_string(&cost_of_goods.2).get_total();
+    let cost_of_goods_value = max(cost_of_goods.1, roll_value);
+
+    let price: String = format!("{} {}", cost_of_goods_value, cost_of_goods.0);
     HouseDish { desc, price }
 }
+
+pub fn get_cost_of_goods(eql: EstablishmentQualityLevel) -> (String, i8, String) {
+    let (coin_type, cost_minimum, dice_to_roll) = match eql {
+        EstablishmentQualityLevel::Squalid => ("copper".to_string(), 2, "1d4+1".to_string()),
+        EstablishmentQualityLevel::Poor => ("copper".to_string(), 3, "1d4+1".to_string()),
+        EstablishmentQualityLevel::Modest => ("copper".to_string(), 15, "4d6+2".to_string()),
+        EstablishmentQualityLevel::Comfortable => ("copper".to_string(), 20, "5d8+3".to_string()),
+        EstablishmentQualityLevel::Wealthy => ("copper".to_string(), 30, "5d12+6".to_string()),
+        EstablishmentQualityLevel::Aristocratic => ("silver".to_string(), 8, "2d6+2".to_string()),
+    };
+    (coin_type, cost_minimum, dice_to_roll)
+}
+
 // --- eof ---

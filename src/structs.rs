@@ -24,7 +24,7 @@ pub mod List {
     }
 
     // ---
-    #[derive(Debug)]
+    #[derive(Debug, Clone)]
     pub struct EstablishmentQuality {
         pub level: EstablishmentQualityLevel,
         pub rooms: String,

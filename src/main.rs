@@ -27,16 +27,17 @@ fn main() {
     // ---
     impl PBHouse {
         fn new() -> Self {
+            let eql = get_establishment_quality();
             PBHouse {
                 name: get_name(),
                 mood: get_mood(),
                 lighting: get_lighting(),
                 smells: get_smells(),
                 size: get_pb_house_size(),
-                establishment_quality: get_establishment_quality(),
+                establishment_quality: eql.clone(),
                 posted_sign: get_posted_sign(),
-                house_drink: get_house_drink(),
-                house_dish: get_house_dish(),
+                house_drink: get_house_drink(eql.level),
+                house_dish: get_house_dish(eql.level),
             }
         }
     }
@@ -125,10 +126,15 @@ fn main() {
             pb_house_desc.push("The menu has the usual standard fare posted.".to_string());
 
             pb_house_desc.push(format!(
-                "The House specialty beverage is
-                     {}, for {},",
+                "The House specialty beverage is {}, for {},",
                 self.house_drink.desc, self.house_drink.price
             ));
+
+            pb_house_desc.push(format!(
+                " while the House specialty dish is {}, for {},",
+                self.house_dish.desc, self.house_dish.price
+            ));
+
             /*
                  The House Specialty Drink is the
                     {House's own Hoppy, pale Ale}, for {16 copper},

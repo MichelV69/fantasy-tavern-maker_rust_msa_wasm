@@ -107,7 +107,7 @@ pub mod List {
         MagicOrbsAndCrystals,
     }
 
-    #[derive(Debug, Display, RandGen)]
+    #[derive(Debug, Display, RandGen, Clone, Copy)]
     pub enum EstablishmentQualityLevel {
         Squalid,
         Poor,
@@ -186,6 +186,54 @@ pub mod List {
         AlcoholNotServedToHalfOrcsHalflingsOrTieflings,
         ColorfulNamesOfPriorGuests,
         WarlocksShotOnSightOnSite,
+    }
+
+    #[derive(RandGen, Display)]
+    pub enum HouseDishHowCooked {
+        SlowRoasted,
+        SmokedAndSeasoned,
+        FireRoasted,
+        DryAged,
+        Broiled,
+        Baked,
+        HoneyBraised,
+        Poached,
+        Fermented,
+        StuffedAndBaconWrapped,
+        DeepFried,
+        CharcoalGroundPit,
+    }
+
+    #[derive(RandGen, Display)]
+    pub enum HouseDishWhatCooked {
+        MuttonLeg,
+        Venison,
+        PlatterFish,
+        HandFish,
+        WildBoarChops,
+        Sausage,
+        BoarRibs,
+        BerryAndCheesePies,
+        WolfFlank,
+        Pheasant,
+        SerpentSteak,
+        PlainsStrider,
+    }
+
+    #[derive(RandGen, Display)]
+    pub enum HouseDishWhatSide {
+        RootVegtables,
+        Mushrooms,
+        CheeseSauce,
+        HotCream,
+        HardBoiledGooseEggsAndSweetDates,
+        OnionSoup,
+        BerrySauce,
+        ChoppedPotatoes,
+        MixedGreens,
+        LeeksOnionsAndCatTails,
+        RoastedForestNuts,
+        SweetSavoryAndSpicyDippingSauces,
     }
 }
 // ---- end of file ----
