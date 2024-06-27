@@ -146,7 +146,7 @@ pub enum PostedSignLocation {
     HungAroundTheNeckOfATrophyMountedStagsHead,
 }
 
-#[derive(Display, RandGen)]
+#[derive(Display, RandGen, PartialEq)]
 pub enum PostedSignMessage {
     WeDontServeAdventurers,
     WeDontServeTieflings,
