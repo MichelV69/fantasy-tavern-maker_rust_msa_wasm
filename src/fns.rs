@@ -30,6 +30,10 @@ pub fn enum_string_to_phase(s: String) -> String {
     result
 }
 
+pub fn tidy() -> (s: String) -> String {
+     trim_whitespace(enum_string_to_phase(s))
+}
+
 // ---
 pub fn get_name() -> String {
     let verb: NameVerb = random();
@@ -41,7 +45,7 @@ pub fn get_name() -> String {
 pub fn get_mood() -> String {
     let current_mood: MoodData = random();
     let result = current_mood.to_string();
-    trim_whitespace(enum_string_to_phase(result))
+    tidy(result)
 }
 
 pub fn get_lighting() -> String {
@@ -49,14 +53,22 @@ pub fn get_lighting() -> String {
     let verb: LightingVerb = random();
     let source: LightingSources = random();
     let result = format!(" The main area is {} {} by {}", adjective, verb, source);
-    trim_whitespace(enum_string_to_phase(result))
+    tidy(result)
 }
 
 pub fn get_smells() -> String {
     let sniff1: FirstSmell = random();
     let sniff2: SecondSmell = random();
-    let result = format!("{} and {}", sniff1, sniff2);
-    trim_whitespace(enum_string_to_phase(result))
+    let result = format!("{} and {}", trim_whitespace(enum_string_to_phase(sniff1)), trim_whitespace(enum_string_to_phase(sniff2)));
+
+    result
+}
+
+pub fn get_posted_sign() -> String {
+    let sign_location: PostedSignLocation = random();
+    let sign_message: PostedSignMessage = random();
+
+    let result = format!(" A sign {} says '{}'.", trim_whitespace(enum_string_to_phase(sign_location)), trim_whitespace(enum_string_to_phase(sign_message)));
 }
 
 // --- eof ---

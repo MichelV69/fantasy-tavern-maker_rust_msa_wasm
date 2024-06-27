@@ -31,7 +31,7 @@ fn main() {
         lighting: String,
         smells: String,
         size: PBHouseSize,
-        // posted_sign: String,
+        posted_sign: String,
         // specialty_drink: String,
         // specialty_food: String,
         // establishment_history_notes: String,
@@ -61,6 +61,7 @@ fn main() {
                 smells: get_smells(),
                 size: get_pb_house_size(),
                 establishment_quality: get_establishment_quality(),
+                posted_sign: get_posted_sign(),
             }
         }
     }
@@ -133,7 +134,13 @@ fn main() {
                 " It seems to be {prep} {} place, {}.",
                 self.mood, self.lighting
             ));
-            // pb_house_desc.push(format!(" A sign just outside the door says 'No Spell Casting!'.",xx);
+            pb_house_desc.push(self.posted_sign.clone()); // NB: I don't trust this
+                                                          /*
+                                                              The menu has the usual standard fare posted. The House Specialty Drink is the
+                                                                  {House's own Hoppy, pale Ale}, for {16 copper},
+                                                                  while the House Specialty Meal is {ground-pit charcoaled sausage,
+                                                                  served with mushrooms}, for {16 copper}.
+                                                          */
             // pb_house_desc.push(format!(" lore ipsum",xx);
             // ---
             // ---

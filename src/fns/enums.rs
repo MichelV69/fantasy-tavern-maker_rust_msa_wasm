@@ -136,4 +136,29 @@ pub enum SecondSmell {
     BakingSweets,
 }
 
+#[derive(Display, RandGen)]
+pub enum PostedSignLocation {
+    OverTheBar,
+    OnTheFrontOfTheBar,
+    JustInsideTheDoor,
+    JustOutsideTheDoor,
+    HungFromTheFireplaceMantle,
+    HungAroundTheNeckOfATrophyMountedStagsHead,
+}
+
+#[derive(Display, RandGen)]
+pub enum PostedSignMessage {
+    WeDontServeAdventurers,
+    WeDontServeTieflings,
+    FreeMealForGoodPerformances,
+    CheapRoomForGoodPerformancesPercentOff,
+    WeaponsNotPermitedToBeDrawn,
+    NoSpellCasting,
+    WeDontServeGoblins,
+    AventurersWelcomePercentOff,
+    AdventurersCanEatButNoAlcoholOrRooms,
+    AlcoholNotServedToHalfOrcsHalflingsOrTieflings,
+    ColorfulNamesOfPriorGuests,
+    WarlocksShotOnSightOnSite,
+}
 // --- eof ---
