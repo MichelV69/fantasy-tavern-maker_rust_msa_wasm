@@ -14,12 +14,16 @@ use inflector::string::singularize::to_singular;
 use std::fmt;
 use tracing::info;
 
+// ---
+mod DiceBag;
+mod Enums;
+mod Structs;
 mod fns;
-use fns::*;
 
-mod dicebag;
-use dicebag::*;
-use fns::ToCapitalized;
+use crate::Enums::List::*;
+use crate::Structs::List::*;
+use fns::*;
+use DiceBag::*;
 
 fn main() {
     info!("--- start of code ---");
@@ -33,26 +37,13 @@ fn main() {
         smells: String,
         size: PBHouseSize,
         posted_sign: String,
-        // specialty_drink: String,
-        // specialty_food: String,
+        house_drink: HouseDrink,
+        house_dish: HouseDish,
         // establishment_history_notes: String,
         // redlight_services: String,
         establishment_quality: EstablishmentQuality,
         // cost_of_goods_index: String,
     }
-
-    // ---
-    // trait Name {
-    //     fn name(&self) -> String;
-    // }
-    //
-    // impl PBHouse {
-    //     fn name(&self) -> String {
-    //         "he {{name_verb}}{{name_noun}}"
-    //             .to_string()
-    //             .to_capitalized()
-    //     }
-    // }
 
     // ---
     impl PBHouse {
@@ -65,6 +56,8 @@ fn main() {
                 size: get_pb_house_size(),
                 establishment_quality: get_establishment_quality(),
                 posted_sign: get_posted_sign(),
+                house_drink: get_house_drink(),
+                house_dish: get_house_dish(),
             }
         }
     }
@@ -106,10 +99,12 @@ fn main() {
                     .to_string(),
             );
             pb_house_desc.push("\n \n ".to_string());
+
             pb_house_desc.push(format!(
                 "'The {}' is the local Pub and Bed House for travellers in this area.",
                 self.name
             ));
+
             pb_house_desc.push(format!(
                 " The {}-quality establishment would be considered {}, with {} tables.",
                 trim_whitespace(enum_string_to_phase(
@@ -133,22 +128,34 @@ fn main() {
                 " Rooms are {} per day, and meals are {} per day.",
                 self.establishment_quality.rooms, self.establishment_quality.meals
             ));
+
             pb_house_desc.push("\n \n ".to_string());
             pb_house_desc.push(format!(
                 " As you enter, the air is full of the scents of {}.",
                 self.smells
             ));
+
             pb_house_desc.push(format!(
                 " The current patrons seem to be {prep} {} bunch, {}.",
                 self.mood, self.lighting
             ));
+
             pb_house_desc.push(self.posted_sign.clone()); // NB: I don't trust this
-                                                          /*
-                                                              The menu has the usual standard fare posted. The House Specialty Drink is the
-                                                                  {House's own Hoppy, pale Ale}, for {16 copper},
-                                                                  while the House Specialty Meal is {ground-pit charcoaled sausage,
-                                                                  served with mushrooms}, for {16 copper}.
-                                                          */
+
+            pb_house_desc.push("\n \n ".to_string());
+            pb_house_desc.push("The menu has the usual standard fare posted.".to_string());
+
+            pb_house_desc.push(format!(
+                "The House specialty beverage is
+                     {}, for {},",
+                self.house_drink.desc, self.house_drink.price
+            ));
+            /*
+                 The House Specialty Drink is the
+                    {House's own Hoppy, pale Ale}, for {16 copper},
+                    while the House Specialty Meal is {ground-pit charcoaled sausage,
+                    served with mushrooms}, for {16 copper}.
+            */
             // pb_house_desc.push(format!(" lore ipsum",xx);
             // ---
             // ---
@@ -189,10 +196,10 @@ fn main() {
         let pb_size: SizeList = random();
         let our_pbhouse: PBHouseSize = match pb_size {
             SizeList::Tiny => {
-                let pb_tables_roll = dicebag::tower::DiceResult::from_string("2d4");
+                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("2d4");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = dicebag::tower::DiceResult::from_string("1d4");
+                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("1d4");
                 let pb_beds = pb_beds_roll.get_total();
 
                 PBHouseSize {
@@ -204,13 +211,13 @@ fn main() {
                 }
             }
             SizeList::Small => {
-                let pb_tables_roll = dicebag::tower::DiceResult::from_string("3d4");
+                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("3d4");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = dicebag::tower::DiceResult::from_string("2d4");
+                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("2d4");
                 let pb_beds = pb_beds_roll.get_total();
 
-                let pb_priv_room_roll = dicebag::tower::DiceResult::from_string("1d4");
+                let pb_priv_room_roll = DiceBag::Tower::DiceResult::from_string("1d4");
                 let pb_priv_rooms = pb_priv_room_roll.get_total();
                 PBHouseSize {
                     size_description: pb_size,
@@ -221,13 +228,13 @@ fn main() {
                 }
             }
             SizeList::Modest => {
-                let pb_tables_roll = dicebag::tower::DiceResult::from_string("4d6");
+                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("4d6");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = dicebag::tower::DiceResult::from_string("3d6");
+                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("3d6");
                 let pb_beds = pb_beds_roll.get_total();
 
-                let pb_priv_room_roll = dicebag::tower::DiceResult::from_string("2d6");
+                let pb_priv_room_roll = DiceBag::Tower::DiceResult::from_string("2d6");
                 let pb_priv_rooms = pb_priv_room_roll.get_total();
                 PBHouseSize {
                     size_description: pb_size,
@@ -238,13 +245,13 @@ fn main() {
                 }
             }
             SizeList::Large => {
-                let pb_tables_roll = dicebag::tower::DiceResult::from_string("5d6");
+                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("5d6");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = dicebag::tower::DiceResult::from_string("4d6");
+                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("4d6");
                 let pb_beds = pb_beds_roll.get_total();
 
-                let pb_priv_room_roll = dicebag::tower::DiceResult::from_string("3d6");
+                let pb_priv_room_roll = DiceBag::Tower::DiceResult::from_string("3d6");
                 let pb_priv_rooms = pb_priv_room_roll.get_total();
                 PBHouseSize {
                     size_description: pb_size,
@@ -255,13 +262,13 @@ fn main() {
                 }
             }
             SizeList::Massive => {
-                let pb_tables_roll = dicebag::tower::DiceResult::from_string("7d8");
+                let pb_tables_roll = DiceBag::Tower::DiceResult::from_string("7d8");
                 let pb_tables = pb_tables_roll.get_total();
 
-                let pb_beds_roll = dicebag::tower::DiceResult::from_string("6d8");
+                let pb_beds_roll = DiceBag::Tower::DiceResult::from_string("6d8");
                 let pb_beds = pb_beds_roll.get_total();
 
-                let pb_priv_room_roll = dicebag::tower::DiceResult::from_string("4d8");
+                let pb_priv_room_roll = DiceBag::Tower::DiceResult::from_string("4d8");
                 let pb_priv_rooms = pb_priv_room_roll.get_total();
                 PBHouseSize {
                     size_description: pb_size,

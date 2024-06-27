@@ -1,5 +1,5 @@
 // ---- start of file ----
-pub mod tower {
+pub mod Tower {
     use rand::distributions::Distribution;
     use rand::distributions::Uniform;
     use rand::prelude::*;

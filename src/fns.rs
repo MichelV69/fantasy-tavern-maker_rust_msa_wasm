@@ -10,10 +10,9 @@ use std::fmt;
 use strum_macros::Display;
 use strum_macros::EnumString;
 
-mod enums;
-use enums::*;
-
-use crate::tower::DiceResult;
+use crate::DiceBag::Tower::*;
+use crate::Enums::List::*;
+use crate::Structs::List::*;
 
 pub fn trim_whitespace(s: String) -> String {
     let words: Vec<_> = s.split_whitespace().collect();
@@ -132,4 +131,15 @@ pub fn get_posted_sign() -> String {
     result
 }
 
+pub fn get_house_drink() -> HouseDrink {
+    let desc: String = "HouseDrink Desc".to_string();
+    let price: String = "11cp".to_string();
+    HouseDrink { desc, price }
+}
+
+pub fn get_house_dish() -> HouseDish {
+    let desc: String = "HouseDish Desc".to_string();
+    let price: String = "13cp".to_string();
+    HouseDish { desc, price }
+}
 // --- eof ---
