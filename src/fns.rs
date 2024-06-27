@@ -37,7 +37,7 @@ pub fn tidy(s: String) -> String {
 }
 
 // from https://stackoverflow.com/questions/38342805/how-do-i-collect-from-multiple-iterator-types#
-trait ToCapitalized {
+pub trait ToCapitalized {
     fn to_capitalized(&self) -> String;
 }
 impl ToCapitalized for str {
@@ -59,7 +59,11 @@ pub fn get_name() -> String {
     let verb: NameVerb = random();
     let noun: NameNoun = random();
 
-    format!("'{} {}'", tidy(verb.to_string()), tidy(noun.to_string()))
+    format!(
+        "{} {}",
+        tidy(verb.to_string()).to_capitalized(),
+        tidy(noun.to_string()).to_capitalized()
+    )
 }
 
 pub fn get_mood() -> String {

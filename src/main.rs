@@ -19,6 +19,7 @@ use fns::*;
 
 mod dicebag;
 use dicebag::*;
+use fns::ToCapitalized;
 
 fn main() {
     info!("--- start of code ---");
@@ -41,15 +42,17 @@ fn main() {
     }
 
     // ---
-    trait Name {
-        fn name(&self) -> String;
-    }
-
-    impl PBHouse {
-        fn name(&self) -> String {
-            "the {{name_verb}}{{name_noun}}".to_string()
-        }
-    }
+    // trait Name {
+    //     fn name(&self) -> String;
+    // }
+    //
+    // impl PBHouse {
+    //     fn name(&self) -> String {
+    //         "he {{name_verb}}{{name_noun}}"
+    //             .to_string()
+    //             .to_capitalized()
+    //     }
+    // }
 
     // ---
     impl PBHouse {
@@ -104,7 +107,7 @@ fn main() {
             );
             pb_house_desc.push("\n \n ".to_string());
             pb_house_desc.push(format!(
-                " The local Pub and Bed House for travellers is the {}.",
+                "'The {}' is the local Pub and Bed House for travellers in this area.",
                 self.name
             ));
             pb_house_desc.push(format!(
