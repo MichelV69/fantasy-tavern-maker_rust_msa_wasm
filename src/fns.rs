@@ -64,8 +64,11 @@ pub fn get_name() -> String {
 
 pub fn get_mood() -> String {
     let current_mood: MoodData = random();
-    let result = current_mood.to_string();
-    tidy(result)
+    let result: String = match current_mood {
+        MoodData::MerchantFriendly => "merchant-friendly".to_string(),
+        _ => tidy(current_mood.to_string()),
+    };
+    result
 }
 
 pub fn get_lighting() -> String {
@@ -73,7 +76,7 @@ pub fn get_lighting() -> String {
     let verb: LightingVerb = random();
     let source: LightingSources = random();
     let result = format!(
-        " The main area is {} {} by {}",
+        " and the main area is {} {} by {}",
         tidy(adjective.to_string()),
         tidy(verb.to_string()),
         tidy(source.to_string())

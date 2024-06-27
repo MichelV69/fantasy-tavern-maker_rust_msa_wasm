@@ -10,9 +10,9 @@ use is_vowel::*;
 use rand::prelude::*;
 use rand_derive2::RandGen;
 
-use tracing::info;
-
+use inflector::string::singularize::to_singular;
 use std::fmt;
+use tracing::info;
 
 mod fns;
 use fns::*;
@@ -115,12 +115,17 @@ fn main() {
                 trim_whitespace(enum_string_to_phase(self.size.size_description.to_string())),
                 self.size.table_count
             ));
+
+            let bed_type_name = if self.size.common_bed_count == 1 {
+                to_singular(&tidy(self.size.common_bed_type.to_string()))
+            } else {
+                tidy(self.size.common_bed_type.to_string())
+            };
             pb_house_desc.push(format!(
                 " It has {} {} in the common room and {} private rooms.",
-                self.size.common_bed_count,
-                enum_string_to_phase(enum_string_to_phase(self.size.common_bed_type.to_string())),
-                self.size.private_room_count
+                self.size.common_bed_count, bed_type_name, self.size.private_room_count
             ));
+
             pb_house_desc.push(format!(
                 " Rooms are {} per day, and meals are {} per day.",
                 self.establishment_quality.rooms, self.establishment_quality.meals
@@ -131,7 +136,7 @@ fn main() {
                 self.smells
             ));
             pb_house_desc.push(format!(
-                " It seems to be {prep} {} place, {}.",
+                " The current patrons seem to be {prep} {} bunch, {}.",
                 self.mood, self.lighting
             ));
             pb_house_desc.push(self.posted_sign.clone()); // NB: I don't trust this
@@ -162,7 +167,7 @@ fn main() {
 
     #[derive(Debug, Display)]
     enum BedTypeList {
-        Hammock,
+        Hammocks,
         BunkBeds,
         SingleBeds,
         TentBeds,
@@ -190,7 +195,7 @@ fn main() {
                 PBHouseSize {
                     size_description: pb_size,
                     table_count: pb_tables,
-                    common_bed_type: BedTypeList::Hammock,
+                    common_bed_type: BedTypeList::Hammocks,
                     common_bed_count: pb_beds,
                     private_room_count: 0,
                 }

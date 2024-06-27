@@ -13,6 +13,7 @@ use rand_derive2::RandGen;
 
 use std::fmt;
 
+// ---
 #[derive(RandGen, Display)]
 pub enum NameVerb {
     Waltzing,
@@ -65,8 +66,6 @@ pub enum NameNoun {
     Waves,
 }
 
-// ---
-
 #[derive(Debug, RandGen, Display, EnumString, Eq, PartialEq)]
 pub enum MoodData {
     Jovial,
@@ -83,10 +82,11 @@ pub enum MoodData {
     MiddleClass,
     UpperClass,
     MerchantFriendly,
+    EnthusiasticGamblers,
     Dour,
     Flirty,
 }
-// ----
+
 #[derive(Display, RandGen)]
 pub enum LightingAdjectives {
     Brightly,
@@ -95,11 +95,13 @@ pub enum LightingAdjectives {
     Dimly,
     Shadowly,
 }
+
 #[derive(Display, RandGen)]
 pub enum LightingVerb {
     Lit,
     Illuminated,
 }
+
 #[derive(Display, RandGen)]
 pub enum LightingSources {
     Candles,

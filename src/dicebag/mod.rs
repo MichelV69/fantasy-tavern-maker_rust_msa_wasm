@@ -59,20 +59,14 @@ pub mod tower {
                 die_count,
                 mod_list
             );
-            // println!(
-            //     "die_size[{:#?}] die_count[{:#?}] mod_list[{:#?}]",
-            //     die_size, die_count, mod_list
-            // );
 
-            let requested_size = match die_size.parse::<i8>().unwrap() {
+            let panic_reason = format!("Unsupported die-size description {}.", request);
+            let requested_size = match die_size.parse::<i8>().expect(&panic_reason) {
                 2 => DiceBag::Coin,
                 4 => DiceBag::D4,
                 6 => DiceBag::D6,
                 8 => DiceBag::D8,
-                _ => panic!(
-                    "{}",
-                    format!("Unsupported die-size description {}.", request)
-                ),
+                _ => panic!("{}", &panic_reason),
             };
 
             let new_roll_request = {
