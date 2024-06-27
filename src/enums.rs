@@ -107,6 +107,33 @@ pub mod List {
         MagicOrbsAndCrystals,
     }
 
+    #[derive(Debug, Display, RandGen)]
+    pub enum EstablishmentQualityLevel {
+        Squalid,
+        Poor,
+        Modest,
+        Comfortable,
+        Wealthy,
+        Aristocratic,
+    }
+    // ---
+    #[derive(Debug, Display, RandGen)]
+    pub enum SizeList {
+        Tiny,
+        Small,
+        Modest,
+        Large,
+        Massive,
+    }
+
+    #[derive(Debug, Display)]
+    pub enum BedTypeList {
+        Hammocks,
+        BunkBeds,
+        SingleBeds,
+        TentBeds,
+    }
+
     #[derive(Display, RandGen)]
     pub enum FirstSmell {
         WoodSmoke,

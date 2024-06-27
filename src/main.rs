@@ -3,9 +3,6 @@
 #![allow(unused_imports)]
 #![allow(unused_mut)]
 
-use strum_macros::Display;
-use strum_macros::EnumString;
-
 use is_vowel::*;
 use rand::prelude::*;
 use rand_derive2::RandGen;
@@ -17,34 +14,16 @@ use tracing::info;
 // ---
 mod dice_bag;
 mod enums;
-mod structs;
 mod functions;
+mod structs;
 
 use crate::enums::List::*;
 use crate::structs::List::*;
-use functions::*;
 use dice_bag::*;
+use functions::*;
 
 fn main() {
     info!("--- start of code ---");
-
-    // ---
-    #[derive(Debug)]
-    struct PBHouse {
-        name: String,
-        mood: String,
-        lighting: String,
-        smells: String,
-        size: PBHouseSize,
-        posted_sign: String,
-        house_drink: HouseDrink,
-        house_dish: HouseDish,
-        // establishment_history_notes: String,
-        // redlight_services: String,
-        establishment_quality: EstablishmentQuality,
-        // cost_of_goods_index: String,
-    }
-
     // ---
     impl PBHouse {
         fn new() -> Self {
@@ -165,33 +144,6 @@ fn main() {
         }
     }
 
-    // ---
-    #[derive(Debug, Display, RandGen)]
-    enum SizeList {
-        Tiny,
-        Small,
-        Modest,
-        Large,
-        Massive,
-    }
-
-    #[derive(Debug, Display)]
-    enum BedTypeList {
-        Hammocks,
-        BunkBeds,
-        SingleBeds,
-        TentBeds,
-    }
-
-    #[derive(Debug)]
-    struct PBHouseSize {
-        size_description: SizeList,
-        table_count: i8,
-        common_bed_type: BedTypeList,
-        common_bed_count: i8,
-        private_room_count: i8,
-    }
-
     fn get_pb_house_size() -> PBHouseSize {
         let pb_size: SizeList = random();
         let our_pbhouse: PBHouseSize = match pb_size {
@@ -282,24 +234,6 @@ fn main() {
         // ---
 
         our_pbhouse
-    }
-
-    // ---
-    #[derive(Debug)]
-    struct EstablishmentQuality {
-        level: EstablishmentQualityLevel,
-        rooms: String,
-        meals: String,
-    }
-
-    #[derive(Debug, Display, RandGen)]
-    enum EstablishmentQualityLevel {
-        Squalid,
-        Poor,
-        Modest,
-        Comfortable,
-        Wealthy,
-        Aristocratic,
     }
 
     fn get_establishment_quality() -> EstablishmentQuality {
