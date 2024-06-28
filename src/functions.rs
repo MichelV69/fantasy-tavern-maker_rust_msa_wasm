@@ -3,6 +3,7 @@
 #![allow(unused_imports)]
 #![allow(unused_mut)]
 
+use inflector::string::singularize::to_singular;
 use is_vowel::*;
 use rand::distributions::WeightedIndex;
 use rand::prelude::*;
@@ -251,7 +252,7 @@ pub fn get_house_drink(eql: EstablishmentQualityLevel) -> HouseDrink {
     let where_is_made = &options_list[dist.sample(&mut rng)];
 
     let drink_index: DrinkList = random();
-    let drink_type_detail = match drink_index {
+    let drink_type_group = match drink_index {
         DrinkList::Ales => drink_index.to_string(),
         DrinkList::Ciders => drink_index.to_string(),
         DrinkList::Whiskeys => drink_index.to_string(),
@@ -260,9 +261,35 @@ pub fn get_house_drink(eql: EstablishmentQualityLevel) -> HouseDrink {
         DrinkList::OtherStock => drink_index.to_string(),
     };
 
-    // description = $"{where_made} {PickFromList(drink_list)}";
+    let drink_type_detail: String = match drink_index {
+        DrinkList::Ales => {
+            let buffer: DrinkAlesDetail = random();
+            tidy(buffer.to_string())
+        }
+        DrinkList::Ciders => {
+            let buffer: DrinkCidersDetail = random();
+            tidy(buffer.to_string())
+        }
+        DrinkList::Whiskeys => {
+            let buffer: DrinkWhiskeysDetail = random();
+            tidy(buffer.to_string())
+        }
+        DrinkList::Rums => {
+            let buffer: DrinkRumsDetail = random();
+            tidy(buffer.to_string())
+        }
+        DrinkList::Wines => {
+            let buffer: DrinkWinesDetail = random();
+            tidy(buffer.to_string())
+        }
+        DrinkList::OtherStock => "dont forget to FIXME".to_string(),
+    };
 
-    let desc: String = format!(" {} {}", where_is_made, drink_type_detail);
+    let desc: String = format!(
+        " {} {}",
+        tidy(where_is_made.to_string()).replace("house", "House"),
+        to_singular(&drink_type_group)
+    );
     let price: String = "11cp".to_string();
     HouseDrink { desc, price }
 }

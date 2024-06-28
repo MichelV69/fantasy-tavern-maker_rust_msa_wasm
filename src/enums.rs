@@ -259,6 +259,43 @@ pub mod List {
         ALocallyMade,
         TheHousesOwn,
     }
+
+    #[derive(RandGen, Display)]
+    pub enum DrinkAlesDetail {
+        Dark,
+        Light,
+        Hoppy,
+        Pale,
+    }
+
+    #[derive(RandGen, Display)]
+    pub enum DrinkCidersDetail {
+        Apple,
+        Pear,
+        Berry,
+    }
+
+    #[derive(RandGen, Display)]
+    pub enum DrinkRumsDetail {
+        White,
+        Amber,
+        Dark,
+        Spiced,
+    }
+
+    #[derive(RandGen, Display)]
+    pub enum DrinkWhiskeysDetail {
+        SingleMalt,
+        Blended,
+    }
+
+    #[derive(RandGen, Display)]
+    pub enum DrinkWinesDetail {
+        Red,
+        White,
+        Rose,
+        Sparkling,
+    }
 }
 
 // ---- end of file ----
