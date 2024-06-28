@@ -310,7 +310,8 @@ pub fn get_house_drink(eql: EstablishmentQualityLevel) -> HouseDrink {
         tidy(where_is_made.to_string()).replace("houses", "House's"),
         drink_type_detail,
         to_singular(&drink_type_group)
-    );
+    )
+    .replace(" OtherStock", "");
 
     let cost_of_goods = get_cost_of_goods(eql);
     let roll_value = DiceResult::from_string(&cost_of_goods.2).get_total();
