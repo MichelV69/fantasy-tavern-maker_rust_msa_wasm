@@ -282,7 +282,28 @@ pub fn get_house_drink(eql: EstablishmentQualityLevel) -> HouseDrink {
             let buffer: DrinkWinesDetail = random();
             tidy(buffer.to_string())
         }
-        DrinkList::OtherStock => "dont forget to FIXME".to_string(),
+        DrinkList::OtherStock => {
+            let options_list = [
+                "Gin".to_string(),
+                "Clearfire".to_string(),
+                "a thick black liqueur brewed with herbs from the local area".to_string(),
+                "a milky liqueur that closely resembles heavy cream".to_string(),
+                format!(
+                    "an iced cocktail made with {} different liquers",
+                    DiceResult::from_string("1d2+1").get_total()
+                ),
+                format!(
+                    "a coffee-based drink, served in a stien, with {} strong spirits mixed in",
+                    DiceResult::from_string("1d2+1").get_total()
+                ),
+            ];
+            let mut rng = thread_rng();
+            let result = options_list
+                .choose(&mut rng)
+                .expect("valid roll in range")
+                .to_string();
+            result
+        }
     };
     let desc: String = format!(
         "{} {} {}",
