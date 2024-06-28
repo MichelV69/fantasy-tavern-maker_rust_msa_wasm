@@ -284,13 +284,18 @@ pub fn get_house_drink(eql: EstablishmentQualityLevel) -> HouseDrink {
         }
         DrinkList::OtherStock => "dont forget to FIXME".to_string(),
     };
-
     let desc: String = format!(
-        " {} {}",
-        tidy(where_is_made.to_string()).replace("house", "House"),
+        "{} {} {}",
+        tidy(where_is_made.to_string()).replace("houses", "House's"),
+        drink_type_detail,
         to_singular(&drink_type_group)
     );
-    let price: String = "11cp".to_string();
+
+    let cost_of_goods = get_cost_of_goods(eql);
+    let roll_value = DiceResult::from_string(&cost_of_goods.2).get_total();
+    let cost_of_goods_value = max(cost_of_goods.1, roll_value);
+    let price: String = format!("{} {}", cost_of_goods_value, cost_of_goods.0);
+
     HouseDrink { desc, price }
 }
 
@@ -305,12 +310,12 @@ pub fn get_house_dish(eql: EstablishmentQualityLevel) -> HouseDish {
         tidy(what_cooked.to_string()),
         tidy(side_dish.to_string())
     );
+
     let cost_of_goods = get_cost_of_goods(eql);
-    //coin_type, cost_minimum, dice_to_roll
     let roll_value = DiceResult::from_string(&cost_of_goods.2).get_total();
     let cost_of_goods_value = max(cost_of_goods.1, roll_value);
-
     let price: String = format!("{} {}", cost_of_goods_value, cost_of_goods.0);
+
     HouseDish { desc, price }
 }
 
