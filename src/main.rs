@@ -146,6 +146,7 @@ impl PBHouse {
     }
 }
 
+// ---
 fn main() {
     info!("--- start of output ---");
 

@@ -9,6 +9,7 @@ is-vowel = "0.1.0"
 rand = "0.8.5"
 rand_derive2 = "0.1.21"
 random = "0.14.0"
-strum = "0.26.2"
+strum = { version = "0.26.2", features = ["derive"] }
 strum_macros = "0.26.4"
 tracing = "0.1.40"
+variant_count = "1.1.0"

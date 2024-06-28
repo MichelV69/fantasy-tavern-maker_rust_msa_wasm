@@ -1,7 +1,9 @@
 // ---- start of file ----
 pub mod List {
 
+    use strum::IntoEnumIterator;
     use strum_macros::Display;
+    use strum_macros::EnumIter;
     use strum_macros::EnumString;
 
     use is_vowel::*;
@@ -9,6 +11,11 @@ pub mod List {
     use rand_derive2::RandGen;
 
     use std::fmt;
+
+    // ---
+    extern crate variant_count;
+    use variant_count::VariantCount;
+    // ---
 
     // ---
     #[derive(RandGen, Display)]
@@ -235,5 +242,23 @@ pub mod List {
         RoastedForestNuts,
         SweetSavoryAndSpicyDippingSauces,
     }
+
+    #[derive(RandGen, Display)]
+    pub enum DrinkList {
+        Ales,
+        Ciders,
+        Whiskeys,
+        Rums,
+        Wines,
+        OtherStock,
+    }
+
+    #[derive(RandGen, Display, VariantCount, EnumIter)]
+    pub enum DrinkMade {
+        AnImported,
+        ALocallyMade,
+        TheHousesOwn,
+    }
 }
+
 // ---- end of file ----

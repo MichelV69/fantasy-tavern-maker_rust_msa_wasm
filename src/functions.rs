@@ -4,12 +4,12 @@
 #![allow(unused_mut)]
 
 use is_vowel::*;
+use rand::distributions::WeightedIndex;
 use rand::prelude::*;
 use rand_derive2::RandGen;
-use std::cmp::*;
-use std::fmt;
-use strum_macros::Display;
-use strum_macros::EnumString;
+use std::{cmp::*, fmt};
+use strum::IntoEnumIterator;
+use strum_macros::{Display, EnumString};
 
 use crate::enums::List::*;
 use crate::structs::List::*;
@@ -243,7 +243,26 @@ pub fn get_establishment_quality() -> EstablishmentQuality {
 }
 
 pub fn get_house_drink(eql: EstablishmentQualityLevel) -> HouseDrink {
-    let desc: String = "HouseDrink Desc".to_string();
+    let weights_vector = (1..=DrinkMade::VARIANT_COUNT).collect::<Vec<usize>>(); // courtesy WGaffa (Twitch)
+    let dist = WeightedIndex::new(weights_vector).unwrap();
+
+    let mut rng = thread_rng();
+    let options_list: Vec<_> = DrinkMade::iter().collect();
+    let where_is_made = &options_list[dist.sample(&mut rng)];
+
+    let drink_index: DrinkList = random();
+    let drink_type_detail = match drink_index {
+        DrinkList::Ales => drink_index.to_string(),
+        DrinkList::Ciders => drink_index.to_string(),
+        DrinkList::Whiskeys => drink_index.to_string(),
+        DrinkList::Rums => drink_index.to_string(),
+        DrinkList::Wines => drink_index.to_string(),
+        DrinkList::OtherStock => drink_index.to_string(),
+    };
+
+    // description = $"{where_made} {PickFromList(drink_list)}";
+
+    let desc: String = format!(" {} {}", where_is_made, drink_type_detail);
     let price: String = "11cp".to_string();
     HouseDrink { desc, price }
 }
