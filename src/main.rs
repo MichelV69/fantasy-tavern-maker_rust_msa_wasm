@@ -122,7 +122,7 @@ impl PBHouse {
         pb_house_desc.push("The menu has the usual standard fare posted.".to_string());
 
         pb_house_desc.push(format!(
-            "The House specialty beverage is {}, for {},",
+            " The House specialty beverage is {}, for {},",
             self.house_drink.desc, self.house_drink.price
         ));
 
@@ -136,7 +136,7 @@ impl PBHouse {
             "\n -----                          DM Notes                          -----".to_string(),
         );
         pb_house_desc.push(format!("\n Establishment History: {}", " lore ipsum"));
-
+        let establishment_history_age = get_establishment_history_age();
         /*
 
            -----                          DM Notes                          -----

@@ -353,4 +353,7 @@ pub fn get_cost_of_goods(eql: EstablishmentQualityLevel) -> (String, i8, String)
     (coin_type, cost_minimum, dice_to_roll)
 }
 
+pub fn get_establishment_history_age() -> String {
+    "TODO : finish get_establishment_history_age".to_string()
+}
 // --- eof ---

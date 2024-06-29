@@ -296,6 +296,14 @@ pub mod List {
         Rose,
         Sparkling,
     }
+
+    #[derive(RandGen, Display)]
+    pub enum EstablishmentHistoryAge {
+        Recent { desc: String },
+        WellEstablished { desc: String },
+        Permanent { desc: String },
+        Generational { desc: String },
+    }
 }
 
 // ---- end of file ----
