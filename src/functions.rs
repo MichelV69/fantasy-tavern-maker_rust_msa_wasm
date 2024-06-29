@@ -354,6 +354,20 @@ pub fn get_cost_of_goods(eql: EstablishmentQualityLevel) -> (String, i8, String)
 }
 
 pub fn get_establishment_history_age() -> String {
+    let weights_vector = (1..=EstablishmentHistoryAge::VARIANT_COUNT).collect::<Vec<usize>>(); // courtesy WGaffa (Twitch)
+    let dist = WeightedIndex::new(weights_vector).unwrap();
+
+    let mut rng = thread_rng();
+    let options_list: Vec<_> = EstablishmentHistoryAge::iter().collect();
+    let age_category = &options_list[dist.sample(&mut rng)];
+
+    match age_category {
+        EstablishmentHistoryAge::Generational => {DiceResult::inline_replace("recently established, within the past [2d4+2] months")},
+        EstablishmentHistoryAge::Permanent => {DiceResult::inline_replace("well established, and has been here for [4d4+3] months")},
+        EstablishmentHistoryAge::WellEstablished => {DiceResult::inline_replace("a permanent local fixture, and has been in business for [2d6] years")},
+        EstablishmentHistoryAge::Recent => {DiceResult::inline_replace("a multi-generation business, in operation for more than [3d8+12] years")},
+    }
+
     "TODO : finish get_establishment_history_age".to_string()
 }
 // --- eof ---

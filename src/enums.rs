@@ -297,12 +297,13 @@ pub mod List {
         Sparkling,
     }
 
-    #[derive(RandGen, Display)]
+    #[derive(RandGen, Display, VariantCount, EnumIter)]
     pub enum EstablishmentHistoryAge {
-        Recent { desc: String },
-        WellEstablished { desc: String },
-        Permanent { desc: String },
-        Generational { desc: String },
+        Generational,
+        Permanent,
+        WellEstablished,
+        Recent,
+
     }
 }
 

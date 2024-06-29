@@ -183,5 +183,14 @@ mod tests {
             debug_assert!(this_roll >= 1);
         }
     }
+
+    #[test]
+    fn rolls_inline_3d4plus2()
+    {
+        let request: String = "rolls_inline_3d4plus2: [3d4+2] . <<== ".to_string();
+        let resulting_text =  inline_replace(&request);
+
+       debug_assert!(request, resulting_text);
+    }
 }
 // ---- end of file ----
