@@ -56,7 +56,7 @@ impl fmt::Display for PBHouse {
 // ---
 impl PBHouse {
     fn stat_data(&self) -> Vec<String> {
-        let mut pb_house_desc: Vec<String> = Vec::new();
+        let mut pb_house_desc: Vec<String> = Vec::with_capacity(22);
         // ---
         let mut first_char = self
             .mood
@@ -127,16 +127,28 @@ impl PBHouse {
         ));
 
         pb_house_desc.push(format!(
-            " while the House specialty dish is {}, for {},",
+            " while the House specialty dish is {}, for {}.",
             self.house_dish.desc, self.house_dish.price
         ));
 
+        pb_house_desc.push("\n \n ".to_string());
+        pb_house_desc.push(
+            "\n -----                          DM Notes                          -----".to_string(),
+        );
+        pb_house_desc.push(format!("\n Establishment History: {}", " lore ipsum"));
+
         /*
-             The House Specialty Drink is the
-                {House's own Hoppy, pale Ale}, for {16 copper},
-                while the House Specialty Meal is {ground-pit charcoaled sausage,
-                served with mushrooms}, for {16 copper}.
-        */
+
+           -----                          DM Notes                          -----
+        Establishment History: The establishment is recently established, within the
+        past 4 months. The establishment and its grounds look to be nearly brand new.
+        Traveling merchants know the place well.
+        Red Light Services:  (Brothel Services (DC11)) (Smuggling (DC16))
+        (Thief / Assassin Guild (ADV w/Thieves Cant) (DC27))
+
+
+                 */
+
         // pb_house_desc.push(format!(" lore ipsum",xx);
         // ---
         // ---
@@ -151,7 +163,7 @@ fn main() {
     info!("--- start of output ---");
 
     let pub_and_bed_house = PBHouse::new();
-    println!("|| {} |", pub_and_bed_house);
+    println!("\n \n {} \n \n", pub_and_bed_house);
 
     info!("--- end of output ---");
 }
