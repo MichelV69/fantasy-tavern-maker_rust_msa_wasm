@@ -61,7 +61,6 @@ pub mod Tower {
             if buffer1[1].contains(['+', '-']) {
                 let mut buffer: String = "".to_string();
                 for c in buffer1[1].chars() {
-                    println!("{}", c);
                     if ['+', '-'].contains(&c) && !buffer.is_empty() {
                         mod_list.push(buffer.parse::<i8>().unwrap());
                         buffer = "".to_string();
@@ -195,8 +194,8 @@ mod tests {
 
     #[test]
     fn does_flip_coin() {
-        let request: String = "1d2".to_string();
-        let resulting_roll = DiceResult::from_string(&request);
+        let request: &str = "1d2";
+        let resulting_roll = DiceResult::from_string(request);
         let roll_value: i8 = resulting_roll.get_total();
 
         event!(Level::INFO, "roll_value[{}]", roll_value);
@@ -206,8 +205,8 @@ mod tests {
 
     #[test]
     fn rolls_1d4() {
-        let request: String = "1d4".to_string();
-        let resulting_roll = DiceResult::from_string(&request);
+        let request: &str = "1d4";
+        let resulting_roll = DiceResult::from_string(request);
         let roll_value: i8 = resulting_roll.get_total();
 
         event!(Level::INFO, "from_string[{}]", roll_value);
@@ -217,8 +216,8 @@ mod tests {
 
     #[test]
     fn rolls_22d8() {
-        let request: String = "22d8".to_string();
-        let resulting_roll = DiceResult::from_string(&request);
+        let request: &str = "22d8";
+        let resulting_roll = DiceResult::from_string(request);
         let roll_value: i8 = resulting_roll.get_total();
 
         event!(Level::INFO, "from_string[{}]", roll_value);
@@ -230,10 +229,10 @@ mod tests {
 
     #[test]
     fn rolls_respect_pos_modifiers() {
-        let request: String = "1d6+3".to_string();
+        let request: &str = "1d6+3";
 
         for i in 1..99 {
-            let resulting_roll = DiceResult::from_string(&request);
+            let resulting_roll = DiceResult::from_string(request);
             let roll_value: i8 = resulting_roll.get_total();
             let mod_total: i8 = resulting_roll.get_mod_total();
 
@@ -246,10 +245,10 @@ mod tests {
 
     #[test]
     fn rolls_respect_neg_modifiers() {
-        let request: String = "1d6-3".to_string();
+        let request: &str = "1d6-3";
 
         for i in 1..99 {
-            let resulting_roll = DiceResult::from_string(&request);
+            let resulting_roll = DiceResult::from_string(request);
             let roll_value: i8 = resulting_roll.get_total();
             let mod_total: i8 = resulting_roll.get_mod_total();
 
@@ -262,7 +261,7 @@ mod tests {
 
     #[test]
     fn rolls_inline_3d4plus2() {
-        let request = "rolls_inline_3d4plus2: [3d4+2]. <<== ";
+        let request: &str = "rolls_inline_3d4plus2: [3d4+2]. <<== ";
         let resulting_text = DiceResult::inline_replace(request);
 
         println!("resulting_text [{}]", resulting_text);
@@ -271,7 +270,7 @@ mod tests {
 
     #[test]
     fn rolls_inline_4d6minus3() {
-        let request = "rolls_inline_4d6minus3: [4d6-3]. <<== ";
+        let request: &str = "rolls_inline_4d6minus3: [4d6-3]. <<== ";
         let resulting_text = DiceResult::inline_replace(request);
 
         println!("resulting_text [{}]", resulting_text);
