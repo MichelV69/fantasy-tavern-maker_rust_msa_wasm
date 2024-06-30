@@ -1,11 +1,9 @@
 // ---- start of file ----
 pub mod Tower {
-    use rand::distributions::Distribution;
-    use rand::distributions::Uniform;
+    use rand::distributions::{Distribution, Uniform};
     use rand::prelude::*;
     use std::str::Split;
-    use tracing::event;
-    use tracing::Level;
+    use tracing::{event, Level};
 
     struct RollRequest {
         die_requested: DiceBag,
@@ -38,30 +36,52 @@ pub mod Tower {
         pub fn get_total(&self) -> i8 {
             self.total_roll
         }
+
+        pub fn get_mod_total(&self) -> i8 {
+            self.total_mod
+        }
+
+        pub fn get_rolls(&self) -> Vec<i8> {
+            self.rolls.clone()
+        }
+
         pub fn from_string(request: &str) -> DiceResult {
-            // eg 5d12+6
+            // eg "5d12-6"
 
-            //5 d12+6
-            let res1: Vec<String> = request.split('d').map(|s| s.to_string()).collect();
-            let die_count = res1[0].parse::<i8>().unwrap();
+            // ---
+            let buffer1: Vec<String> = request.split('d').map(|s| s.to_string()).collect();
+            let die_count = buffer1[0].parse::<i8>().unwrap();
+            let die_size = buffer1[1]
+                .split(['+', '-'])
+                .map(|i| i.parse::<i8>().unwrap())
+                .collect::<Vec<_>>()[0];
 
-            let res2: Vec<String> = res1[1]
-                .replace('d', "")
-                .split(&['+', '-'])
-                .map(|s| s.to_string())
-                .collect();
-
-            let mut panic_reason = format!("no strings allowed '{:#?}'.", res2[0]);
-            let die_size = &res2[0].parse::<i8>().expect(&panic_reason);
-
-            let mut mod_list: Vec<i8> = [].to_vec();
-            let stop = res2.len() - 1;
-            if stop > 1 {
-                event!(Level::INFO, "No modifiers passed");
-                let res3: Vec<_> = res2[1..stop].to_vec();
-                for (k, v) in res3.iter().enumerate() {
-                    mod_list.push(v.parse::<i8>().unwrap());
+            // ----
+            let mut mod_list: Vec<i8> = vec![];
+            if buffer1[1].contains(['+', '-']) {
+                let mut buffer: String = "".to_string();
+                for c in buffer1[1].chars() {
+                    println!("{}", c);
+                    if ['+', '-'].contains(&c) && !buffer.is_empty() {
+                        mod_list.push(buffer.parse::<i8>().unwrap());
+                        buffer = "".to_string();
+                    }
+                    buffer += &c.to_string();
                 }
+                if !buffer.is_empty() {
+                    mod_list.push(buffer.parse::<i8>().unwrap());
+                }
+            }
+
+            // ---
+            if mod_list.len() > 1 {
+                mod_list = mod_list[1..].to_vec();
+            }
+
+            // ---
+            let mut mod_total: i8 = 0;
+            for v in &mod_list {
+                mod_total += v;
             }
 
             event!(
@@ -97,6 +117,24 @@ pub mod Tower {
 
             process_roll_request(new_roll_request)
         }
+
+        pub fn inline_replace(human_readable: &str) -> String {
+            // human_readable expect to find "there are [5d12+6] bad guys"
+            // break out the dice string and encapsulate into new_roll_request
+            let buffer1: Vec<String> = human_readable.split('[').map(|s| s.to_string()).collect();
+            // "there are [","5d12+6] bad guys"
+            let buffer2: Vec<String> = buffer1[1].split(']').map(|s| s.to_string()).collect();
+            // "5d12+6"," bad guys"
+            let desired_roll = &buffer2[0];
+            // make the die roll
+            let wrapped_roll = Self::from_string(desired_roll);
+            // unwrap die roll
+            let roll_value = wrapped_roll.get_total();
+            // replace the dice string with the roll result roll_value
+            let needle = format!("[{}]", &desired_roll);
+            // return the modified string
+            human_readable.replace(&needle, &roll_value.to_string())
+        }
     } // impl DiceResult
 
     fn process_roll_request(request: RollRequest) -> DiceResult {
@@ -127,15 +165,22 @@ pub mod Tower {
             roll_list.push(roll_val);
         }
 
+        // modifer_list: Vec<i8>
+        let mut mod_total = 0;
+        for v in request.modifer_list {
+            mod_total += v;
+        }
+
         let mut roll_total = 0;
         for roll in &roll_list {
             roll_total += roll;
         }
+        roll_total += mod_total;
 
         DiceResult {
             request: "no_roll".to_string(),
             rolls: roll_list,
-            total_mod: 0,
+            total_mod: mod_total,
             total_roll: roll_total,
         }
     }
@@ -145,52 +190,92 @@ pub mod Tower {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::Tower::DiceResult;
+    use tracing::{event, Level};
 
     #[test]
     fn does_flip_coin() {
         let request: String = "1d2".to_string();
-        let resulting_roll = roll_string(&request);
-        let roll_value: i8 = resulting_roll.total_roll;
-        event!(Level::INFO, "roll_value[{}]", roll_value);
+        let resulting_roll = DiceResult::from_string(&request);
+        let roll_value: i8 = resulting_roll.get_total();
 
-        debug_assert!(roll_value <= 2);
-        debug_assert!(roll_value >= 1);
+        event!(Level::INFO, "roll_value[{}]", roll_value);
+        println!("roll_value[{}]", roll_value);
+        debug_assert!((1..=2).contains(&roll_value));
     }
 
     #[test]
     fn rolls_1d4() {
         let request: String = "1d4".to_string();
-        let resulting_roll = roll_string(&request);
-        let roll_value: i8 = resulting_roll.total_roll;
-        event!(Level::INFO, "roll_value[{}]", roll_value);
+        let resulting_roll = DiceResult::from_string(&request);
+        let roll_value: i8 = resulting_roll.get_total();
 
+        event!(Level::INFO, "from_string[{}]", roll_value);
         println!("roll_value[{}]", roll_value);
-
-        debug_assert!(roll_value <= 4);
-        debug_assert!(roll_value >= 1);
+        debug_assert!((1..=4).contains(&roll_value));
     }
 
     #[test]
-    fn rolls_20d4() {
-        let request: String = "2d4".to_string();
-        let resulting_roll = roll_string(&request);
-        let roll_value: i8 = resulting_roll.total_roll;
+    fn rolls_22d8() {
+        let request: String = "22d8".to_string();
+        let resulting_roll = DiceResult::from_string(&request);
+        let roll_value: i8 = resulting_roll.get_total();
 
-        event!(Level::INFO, "roll_value[{}]", roll_value);
+        event!(Level::INFO, "from_string[{}]", roll_value);
         println!("roll_value[{}]", roll_value);
-        for this_roll in resulting_roll.rolls {
-            debug_assert!(this_roll <= 4);
-            debug_assert!(this_roll >= 1);
+        for this_roll in resulting_roll.get_rolls() {
+            debug_assert!((1..=8).contains(&this_roll));
         }
     }
 
     #[test]
-    fn rolls_inline_3d4plus2()
-    {
-        let request: String = "rolls_inline_3d4plus2: [3d4+2] . <<== ".to_string();
-        let resulting_text =  inline_replace(&request);
+    fn rolls_respect_pos_modifiers() {
+        let request: String = "1d6+3".to_string();
 
-       debug_assert!(request, resulting_text);
+        for i in 1..99 {
+            let resulting_roll = DiceResult::from_string(&request);
+            let roll_value: i8 = resulting_roll.get_total();
+            let mod_total: i8 = resulting_roll.get_mod_total();
+
+            event!(Level::INFO, "from_string[{}]", roll_value);
+            println!("roll_value[{}]", roll_value);
+            println!("mod_total[{}]", mod_total);
+            debug_assert!((4..=9).contains(&roll_value)); //21
+        }
+    }
+
+    #[test]
+    fn rolls_respect_neg_modifiers() {
+        let request: String = "1d6-3".to_string();
+
+        for i in 1..99 {
+            let resulting_roll = DiceResult::from_string(&request);
+            let roll_value: i8 = resulting_roll.get_total();
+            let mod_total: i8 = resulting_roll.get_mod_total();
+
+            event!(Level::INFO, "from_string[{}]", roll_value);
+            println!("roll_value[{}]", roll_value);
+            println!("mod_total[{}]", mod_total);
+            debug_assert!((-2..=3).contains(&roll_value)); //21
+        }
+    }
+
+    #[test]
+    fn rolls_inline_3d4plus2() {
+        let request = "rolls_inline_3d4plus2: [3d4+2]. <<== ";
+        let resulting_text = DiceResult::inline_replace(request);
+
+        println!("resulting_text [{}]", resulting_text);
+        debug_assert!(request != resulting_text);
+    }
+
+    #[test]
+    fn rolls_inline_4d6minus3() {
+        let request = "rolls_inline_4d6minus3: [4d6-3]. <<== ";
+        let resulting_text = DiceResult::inline_replace(request);
+
+        println!("resulting_text [{}]", resulting_text);
+        debug_assert!(request != resulting_text);
     }
 }
 // ---- end of file ----

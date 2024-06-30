@@ -303,7 +303,6 @@ pub mod List {
         Permanent,
         WellEstablished,
         Recent,
-
     }
 }
 
