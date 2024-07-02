@@ -5,47 +5,36 @@ pub mod Tower {
     use std::str::Split;
     use tracing::{event, Level};
 
-    struct RollRequest {
-        die_requested: DiceBag,
-        number_rolls: i8,
-        modifer_list: Vec<i8>,
-    }
-
-    enum DiceBag {
-        Coin,
-        D2,
-        D4,
-        D6,
-        D8,
-        D10,
-        D12,
-        D20,
-    }
-
     pub struct DiceResult {
         request: String,
         rolls: Vec<i8>,
         total_mod: i8,
         total_roll: i8,
     }
-    trait GetDiceResult {
+
+    pub trait RollDice {
         fn get_total(&self) -> i8;
+        fn get_mod_total(&self) -> i8;
+        fn get_rolls(&self) -> Vec<i8>;
+        fn from_string(request: &str) -> DiceResult;
+        fn inline_replace(human_readable: &str) -> String;
+        fn from_pool(request: &str) -> DiceResult;
     }
 
-    impl DiceResult {
-        pub fn get_total(&self) -> i8 {
+    impl RollDice for DiceResult {
+        fn get_total(&self) -> i8 {
             self.total_roll
         }
 
-        pub fn get_mod_total(&self) -> i8 {
+        fn get_mod_total(&self) -> i8 {
             self.total_mod
         }
 
-        pub fn get_rolls(&self) -> Vec<i8> {
+        fn get_rolls(&self) -> Vec<i8> {
             self.rolls.clone()
         }
 
-        pub fn from_string(request: &str) -> DiceResult {
+        fn from_string(request: &str) -> DiceResult {
             // eg "5d12-6"
 
             if request.contains("coin") && request.contains("flip") {
@@ -129,7 +118,7 @@ pub mod Tower {
             process_roll_request(new_roll_request)
         }
 
-        pub fn inline_replace(human_readable: &str) -> String {
+        fn inline_replace(human_readable: &str) -> String {
             // human_readable expect to find "there are [5d12+6] bad guys"
             // break out the dice string and encapsulate into new_roll_request
             let buffer1: Vec<String> = human_readable.split('[').map(|s| s.to_string()).collect();
@@ -146,7 +135,33 @@ pub mod Tower {
             // return the modified string
             human_readable.replace(&needle, &roll_value.to_string())
         }
+
+        fn from_pool(request: &str) -> DiceResult {
+            DiceResult {
+                request: "not_implemented".into(),
+                rolls: vec![0],
+                total_mod: 0,
+                total_roll: 0,
+            }
+        }
     } // impl DiceResult
+
+    struct RollRequest {
+        die_requested: DiceBag,
+        number_rolls: i8,
+        modifer_list: Vec<i8>,
+    }
+
+    enum DiceBag {
+        Coin,
+        D2,
+        D4,
+        D6,
+        D8,
+        D10,
+        D12,
+        D20,
+    }
 
     fn process_roll_request(request: RollRequest) -> DiceResult {
         let mut rng = rand::thread_rng();
@@ -201,13 +216,13 @@ pub mod Tower {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::Tower::DiceResult;
+    use crate::Tower::*;
     use tracing::{event, Level};
 
     #[test]
     fn does_flip_coin() {
         let request: &str = "1d2";
-        let resulting_roll = DiceResult::from_string(request);
+        let resulting_roll = <Tower::DiceResult as RollDice>::from_string(request);
         let roll_value: i8 = resulting_roll.get_total();
 
         event!(Level::INFO, "roll_value[{}]", roll_value);
@@ -218,7 +233,7 @@ mod tests {
     #[test]
     fn rolls_1d4() {
         let request: &str = "1d4";
-        let resulting_roll = DiceResult::from_string(request);
+        let resulting_roll = <Tower::DiceResult as RollDice>::from_string(request);
         let roll_value: i8 = resulting_roll.get_total();
 
         event!(Level::INFO, "from_string[{}]", roll_value);
@@ -229,7 +244,7 @@ mod tests {
     #[test]
     fn rolls_22d8() {
         let request: &str = "22d8";
-        let resulting_roll = DiceResult::from_string(request);
+        let resulting_roll = <Tower::DiceResult as RollDice>::from_string(request);
         let roll_value: i8 = resulting_roll.get_total();
 
         event!(Level::INFO, "from_string[{}]", roll_value);
@@ -244,7 +259,7 @@ mod tests {
         let request: &str = "1d6+3";
 
         for i in 1..99 {
-            let resulting_roll = DiceResult::from_string(request);
+            let resulting_roll = <Tower::DiceResult as RollDice>::from_string(request);
             let roll_value: i8 = resulting_roll.get_total();
             let mod_total: i8 = resulting_roll.get_mod_total();
 
@@ -260,7 +275,7 @@ mod tests {
         let request: &str = "1d6-3";
 
         for i in 1..99 {
-            let resulting_roll = DiceResult::from_string(request);
+            let resulting_roll = <Tower::DiceResult as RollDice>::from_string(request);
             let roll_value: i8 = resulting_roll.get_total();
             let mod_total: i8 = resulting_roll.get_mod_total();
 
@@ -274,7 +289,7 @@ mod tests {
     #[test]
     fn rolls_inline_3d4plus2() {
         let request: &str = "rolls_inline_3d4plus2: [3d4+2]. <<== ";
-        let resulting_text = DiceResult::inline_replace(request);
+        let resulting_text = <Tower::DiceResult as RollDice>::inline_replace(request);
 
         println!("resulting_text [{}]", resulting_text);
         debug_assert!(request != resulting_text);
@@ -283,7 +298,7 @@ mod tests {
     #[test]
     fn rolls_inline_4d6minus3() {
         let request: &str = "rolls_inline_4d6minus3: [4d6-3]. <<== ";
-        let resulting_text = DiceResult::inline_replace(request);
+        let resulting_text = <Tower::DiceResult as RollDice>::inline_replace(request);
 
         println!("resulting_text [{}]", resulting_text);
         debug_assert!(request != resulting_text);
