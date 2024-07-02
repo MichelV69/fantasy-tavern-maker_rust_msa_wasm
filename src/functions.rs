@@ -408,15 +408,20 @@ pub fn get_establishment_reputation() -> String {
 
     let mut rng = thread_rng();
     let options_list: Vec<_> = EstablishmentReputuation::iter().collect();
-    let chosen_option = &options_list[dist.sample(&mut rng)];
+    let mut chosen_option = &options_list[dist.sample(&mut rng)];
+
+    chosen_option = match chosen_option {
+        EstablishmentReputuation::MurderScene => &options_list[dist.sample(&mut rng)],
+        _ => chosen_option,
+    };
 
     let result = match chosen_option {
-        EstablishmentReputuation::PlotRumorsZZ4 => "Owner knows plot-relevant rumors",
-        EstablishmentReputuation::MerchantsLikeZZ4 => "Traveling merchants know the place well",
-        EstablishmentReputuation::MilitaPatrolZZ4 => &DiceResult::inline_replace(
+        EstablishmentReputuation::PlotRumors => "Owner knows plot-relevant rumors",
+        EstablishmentReputuation::MerchantsLike => "Traveling merchants know the place well",
+        EstablishmentReputuation::MilitaPatrol => &DiceResult::inline_replace(
             "A local milita band stops by here every [3d6+4] days as part of their patrol route",
         ),
-        EstablishmentReputuation::MurderSceneZZ1 => "A murder happened here",
+        EstablishmentReputuation::MurderScene => "An infamous murder happened here",
     };
 
     result.into()

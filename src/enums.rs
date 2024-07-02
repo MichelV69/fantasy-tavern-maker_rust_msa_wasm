@@ -315,10 +315,10 @@ pub mod List {
 
     #[derive(RandGen, Display, VariantCount, EnumIter)]
     pub enum EstablishmentReputuation {
-        PlotRumorsZZ4,
-        MerchantsLikeZZ4,
-        MilitaPatrolZZ4,
-        MurderSceneZZ1,
+        PlotRumors,
+        MerchantsLike,
+        MilitaPatrol,
+        MurderScene,
     }
 }
 
