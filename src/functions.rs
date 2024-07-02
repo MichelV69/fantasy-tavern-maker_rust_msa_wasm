@@ -476,7 +476,11 @@ pub fn get_red_light_services_list() -> Option<String> {
     });
 
     let how_many_services = <Tower::DiceResult as RollDice>::from_pool("6d6|6");
-    Some("some services rendered".into())
+    Some(format!(
+        "{} services rendered via {}",
+        how_many_services.get_total(),
+        how_many_services.get_request()
+    ))
 }
 
 // --- eof ---
