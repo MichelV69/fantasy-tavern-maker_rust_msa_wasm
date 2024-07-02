@@ -13,6 +13,7 @@ pub mod Tower {
     }
 
     pub trait RollDice {
+        fn get_request(&self) -> String;
         fn get_total(&self) -> i8;
         fn get_mod_total(&self) -> i8;
         fn get_rolls(&self) -> Vec<i8>;
@@ -22,6 +23,10 @@ pub mod Tower {
     }
 
     impl RollDice for DiceResult {
+        fn get_request(&self) -> String {
+            self.request.clone()
+        }
+
         fn get_total(&self) -> i8 {
             self.total_roll
         }
@@ -137,8 +142,22 @@ pub mod Tower {
         }
 
         fn from_pool(request: &str) -> DiceResult {
+            let buffer1: Vec<String> = request.split('|').map(|s| s.to_string()).collect();
+
+            let dice_string: String = buffer1[0].clone();
+            let success_check: i8 = buffer1[1].parse::<i8>().expect("should be an i8");
+
+            let buffer2: Vec<String> = dice_string.split('d').map(|s| s.to_string()).collect();
+
+            let die_count: i8 = buffer2[0].parse::<i8>().expect("should be N of NdX");
+            let die_size: i8 = buffer2[1].parse::<i8>().expect("should be X of NdX");
+
+            // --- --- ---
             DiceResult {
-                request: "not_implemented".into(),
+                request: format!(
+                    "requested {}d{}, Success {}+",
+                    die_count, die_size, success_check
+                ),
                 rolls: vec![0],
                 total_mod: 0,
                 total_roll: 0,
