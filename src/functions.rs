@@ -427,4 +427,12 @@ pub fn get_establishment_reputation() -> String {
     result.into()
 }
 
+pub fn get_red_light_services_list() -> Option<String> {
+    if DiceResult::from_string("flip coin").get_total() == 2 {
+        return None;
+    }
+
+    Some("some services rendered".into())
+}
+
 // --- eof ---

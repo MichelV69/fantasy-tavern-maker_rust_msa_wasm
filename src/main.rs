@@ -135,7 +135,6 @@ impl PBHouse {
         pb_house_desc.push(
             "\n -----                          DM Notes                          -----".to_string(),
         );
-        // let establishment_history_age = get_establishment_history_age();
         pb_house_desc.push(format!(
             "\n Establishment History: The {} is {}. {}. {}.",
             self.name,
@@ -143,21 +142,20 @@ impl PBHouse {
             get_establishment_appearance(),
             get_establishment_reputation()
         ));
-        /*
+        let red_light_services_list = get_red_light_services_list();
+        if red_light_services_list.is_some() {
+            pb_house_desc.push(format!(
+                "\n Red Light Services: {}",
+                red_light_services_list.expect("Should always be String.")
+            ))
+        };
 
-           -----                          DM Notes                          -----
-        Establishment History: The establishment is recently established, within the
-        past 4 months. The establishment and its grounds look to be nearly brand new.
-        Traveling merchants know the place well.
+        /*
         Red Light Services:  (Brothel Services (DC11)) (Smuggling (DC16))
         (Thief / Assassin Guild (ADV w/Thieves Cant) (DC27))
 
-
-                 */
-
-        // pb_house_desc.push(format!(" lore ipsum",xx);
-        // ---
-        // ---
+        pb_house_desc.push(format!(" lore ipsum: {}", "Muspi erol");
+        */
 
         // ---
         pb_house_desc
