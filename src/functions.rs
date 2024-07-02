@@ -363,23 +363,43 @@ pub fn get_establishment_history_age() -> String {
 
     match age_category {
         EstablishmentHistoryAge::Generational => {
-            DiceResult::inline_replace("recently established, within the past [2d4+2] months");
+            DiceResult::inline_replace("recently established, within the past [2d4+2] months")
         }
         EstablishmentHistoryAge::Permanent => {
-            DiceResult::inline_replace("well established, and has been here for [4d4+3] months");
+            DiceResult::inline_replace("well established, and has been here for [4d4+3] months")
         }
-        EstablishmentHistoryAge::WellEstablished => {
-            DiceResult::inline_replace(
-                "a permanent local fixture, and has been in business for [2d6] years",
-            );
+        EstablishmentHistoryAge::WellEstablished => DiceResult::inline_replace(
+            "a permanent local fixture, and has been in business for [2d6] years",
+        ),
+        EstablishmentHistoryAge::Recent => DiceResult::inline_replace(
+            "a multi-generation business, in operation for more than [3d8+12] years",
+        ),
+    }
+}
+
+pub fn get_establishment_appearance() -> String {
+    let weights_vector = (1..=EstablishmentAppearance::VARIANT_COUNT).collect::<Vec<usize>>(); // courtesy WGaffa (Twitch)
+    let dist = WeightedIndex::new(weights_vector).unwrap();
+
+    let mut rng = thread_rng();
+    let options_list: Vec<_> = EstablishmentAppearance::iter().collect();
+    let appearance_category = &options_list[dist.sample(&mut rng)];
+
+    match appearance_category {
+        EstablishmentAppearance::MinorRepairs => {
+            "The building is in need of minor repairs to the exterior"
         }
-        EstablishmentHistoryAge::Recent => {
-            DiceResult::inline_replace(
-                "a multi-generation business, in operation for more than [3d8+12] years",
-            );
+        EstablishmentAppearance::GoodCondition => {
+            "The building is in good condition, and shows evidence of regular care"
+        }
+        EstablishmentAppearance::BrandNew => {
+            "The establishment and its grounds look to be nearly brand new"
+        }
+        EstablishmentAppearance::WhiteWashed => {
+            "Parts of the exterior are fire-blacked or white-washed, looking recent"
         }
     }
-
-    "TODO : finish get_establishment_history_age".to_string()
+    .into()
 }
+
 // --- eof ---

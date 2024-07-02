@@ -304,6 +304,14 @@ pub mod List {
         WellEstablished,
         Recent,
     }
+
+    #[derive(RandGen, Display, VariantCount, EnumIter)]
+    pub enum EstablishmentAppearance {
+        MinorRepairs,
+        GoodCondition,
+        BrandNew,
+        WhiteWashed,
+    }
 }
 
 // ---- end of file ----

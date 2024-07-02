@@ -135,8 +135,13 @@ impl PBHouse {
         pb_house_desc.push(
             "\n -----                          DM Notes                          -----".to_string(),
         );
-        pb_house_desc.push(format!("\n Establishment History: {}", " lore ipsum"));
-        let establishment_history_age = get_establishment_history_age();
+        // let establishment_history_age = get_establishment_history_age();
+        pb_house_desc.push(format!(
+            "\n Establishment History: The {} is {}. {}.",
+            self.name,
+            get_establishment_history_age(),
+            get_establishment_appearance()
+        ));
         /*
 
            -----                          DM Notes                          -----
