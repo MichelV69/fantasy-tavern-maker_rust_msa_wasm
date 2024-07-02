@@ -359,9 +359,9 @@ pub fn get_establishment_history_age() -> String {
 
     let mut rng = thread_rng();
     let options_list: Vec<_> = EstablishmentHistoryAge::iter().collect();
-    let age_category = &options_list[dist.sample(&mut rng)];
+    let chosen_option = &options_list[dist.sample(&mut rng)];
 
-    match age_category {
+    match chosen_option {
         EstablishmentHistoryAge::Generational => {
             DiceResult::inline_replace("recently established, within the past [2d4+2] months")
         }
@@ -383,9 +383,9 @@ pub fn get_establishment_appearance() -> String {
 
     let mut rng = thread_rng();
     let options_list: Vec<_> = EstablishmentAppearance::iter().collect();
-    let appearance_category = &options_list[dist.sample(&mut rng)];
+    let chosen_option = &options_list[dist.sample(&mut rng)];
 
-    match appearance_category {
+    match chosen_option {
         EstablishmentAppearance::MinorRepairs => {
             "The building is in need of minor repairs to the exterior"
         }
@@ -400,6 +400,26 @@ pub fn get_establishment_appearance() -> String {
         }
     }
     .into()
+}
+
+pub fn get_establishment_reputation() -> String {
+    let weights_vector = (1..=EstablishmentReputuation::VARIANT_COUNT).collect::<Vec<usize>>(); // courtesy WGaffa (Twitch)
+    let dist = WeightedIndex::new(weights_vector).unwrap();
+
+    let mut rng = thread_rng();
+    let options_list: Vec<_> = EstablishmentReputuation::iter().collect();
+    let chosen_option = &options_list[dist.sample(&mut rng)];
+
+    let result = match chosen_option {
+        EstablishmentReputuation::PlotRumorsZZ4 => "Owner knows plot-relevant rumors",
+        EstablishmentReputuation::MerchantsLikeZZ4 => "Traveling merchants know the place well",
+        EstablishmentReputuation::MilitaPatrolZZ4 => &DiceResult::inline_replace(
+            "A local milita band stops by here every [3d6+4] days as part of their patrol route",
+        ),
+        EstablishmentReputuation::MurderSceneZZ1 => "A murder happened here",
+    };
+
+    result.into()
 }
 
 // --- eof ---

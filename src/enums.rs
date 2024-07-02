@@ -312,6 +312,14 @@ pub mod List {
         BrandNew,
         WhiteWashed,
     }
+
+    #[derive(RandGen, Display, VariantCount, EnumIter)]
+    pub enum EstablishmentReputuation {
+        PlotRumorsZZ4,
+        MerchantsLikeZZ4,
+        MilitaPatrolZZ4,
+        MurderSceneZZ1,
+    }
 }
 
 // ---- end of file ----
