@@ -48,6 +48,18 @@ pub mod Tower {
         pub fn from_string(request: &str) -> DiceResult {
             // eg "5d12-6"
 
+            if request.contains("coin") && request.contains("flip") {
+                let new_roll_request = {
+                    RollRequest {
+                        die_requested: DiceBag::Coin,
+                        number_rolls: 1,
+                        modifer_list: vec![0],
+                    }
+                };
+
+                return process_roll_request(new_roll_request);
+            }
+
             // ---
             let buffer1: Vec<String> = request.split('d').map(|s| s.to_string()).collect();
             let die_count = buffer1[0].parse::<i8>().unwrap();
