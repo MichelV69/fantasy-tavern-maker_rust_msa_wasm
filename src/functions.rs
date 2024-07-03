@@ -452,7 +452,7 @@ pub fn get_red_light_services_list() -> Option<String> {
     possible_services_table.push(ServiceTableItem {
         weight: 4,
         description: "Brothel",
-        dc_dice_roll: "1d4+10",
+        dc_dice_roll: "1d6+10",
     });
     possible_services_table.push(ServiceTableItem {
         weight: 3,
@@ -462,17 +462,17 @@ pub fn get_red_light_services_list() -> Option<String> {
     possible_services_table.push(ServiceTableItem {
         weight: 2,
         description: "Pit Fighting",
-        dc_dice_roll: "2d4+12",
+        dc_dice_roll: "2d6+12",
     });
     possible_services_table.push(ServiceTableItem {
         weight: 1,
         description: "Sinfyre Den",
-        dc_dice_roll: "3d4+13",
+        dc_dice_roll: "3d6+13",
     });
     possible_services_table.push(ServiceTableItem {
         weight: 1,
         description: "Thief / Assassin Guild (ADV w/Thieves Cant)",
-        dc_dice_roll: "4d4+14",
+        dc_dice_roll: "3d8+16",
     });
     let table_weights =
         WeightedIndex::new(possible_services_table.iter().map(|item| item.weight)).unwrap();
