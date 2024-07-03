@@ -16,14 +16,14 @@ mod dice_bag;
 mod enums;
 mod functions;
 mod structs;
-mod npc_maker;
+mod fantasy_npc;
 
 use crate::enums::List::*;
 use crate::structs::List::*;
 use dice_bag::*;
 use functions::*;
 
-use npc_maker::*;
+use fantasy_npc::Maker::*;
 
 // ---
 trait StatSheet {
