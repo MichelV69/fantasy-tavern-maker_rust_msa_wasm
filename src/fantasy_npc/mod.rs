@@ -3,6 +3,13 @@
 // --- tests
 #[cfg(test)]
 mod tests {
+    // create new Tombstone
+    // assign char_type
+    // randomize gender
+    // randomize partner_preference
+    // randomize public_name
+    // randomize task_desc
+    // randomize race
 
 } // mod tests
 
