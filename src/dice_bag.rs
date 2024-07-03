@@ -152,15 +152,24 @@ pub mod Tower {
             let die_count: i8 = buffer2[0].parse::<i8>().expect("should be N of NdX");
             let die_size: i8 = buffer2[1].parse::<i8>().expect("should be X of NdX");
 
+            let wrapped_roll = Self::from_string(&format!("{}d{}", die_count, die_size));
+            let list_rolls = &wrapped_roll.get_rolls();
+
+            let mut success_count: i8 = 0;
+            for roll in list_rolls {
+                if *roll >= success_check {
+                    success_count += 1;
+                }
+            }
             // --- --- ---
             DiceResult {
                 request: format!(
-                    "requested {}d{}, Success {}+",
-                    die_count, die_size, success_check
+                    "requested {}d{}, Success {}+, giving {} successes",
+                    die_count, die_size, success_check, success_count
                 ),
-                rolls: vec![0],
+                rolls: list_rolls.to_vec(),
                 total_mod: 0,
-                total_roll: 0,
+                total_roll: success_count,
             }
         }
     } // impl DiceResult

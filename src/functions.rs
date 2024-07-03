@@ -451,7 +451,7 @@ pub fn get_red_light_services_list() -> Option<String> {
     });
     possible_services_table.push(ServiceTableItem {
         weight: 4,
-        description: "Brothel Services",
+        description: "Brothel",
         dc_dice_roll: "1d4+10",
     });
     possible_services_table.push(ServiceTableItem {
@@ -474,13 +474,24 @@ pub fn get_red_light_services_list() -> Option<String> {
         description: "Thief / Assassin Guild (ADV w/Thieves Cant)",
         dc_dice_roll: "4d4+14",
     });
+    let table_weights =
+        WeightedIndex::new(possible_services_table.iter().map(|item| item.weight)).unwrap();
 
-    let how_many_services = <Tower::DiceResult as RollDice>::from_pool("6d6|6");
-    Some(format!(
-        "{} services rendered via {}",
-        how_many_services.get_total(),
-        how_many_services.get_request()
-    ))
+    let die_pool_result = <Tower::DiceResult as RollDice>::from_pool("5d6|6");
+    let how_many_services: i8 = 1 + die_pool_result.get_total();
+    let mut red_light_services_list: String = "".into();
+    let mut rng = thread_rng();
+
+    for i in 1..=how_many_services {
+        let result = &possible_services_table[table_weights.sample(&mut rng)];
+        let new_service: String = <Tower::DiceResult as RollDice>::inline_replace(&format!(
+            "|{} (DC [{}])|",
+            result.description, result.dc_dice_roll
+        ));
+        red_light_services_list = format!("{} {}", red_light_services_list, new_service);
+    }
+
+    Some(red_light_services_list)
 }
 
 // --- eof ---

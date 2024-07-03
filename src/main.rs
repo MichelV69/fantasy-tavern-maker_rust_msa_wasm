@@ -136,7 +136,7 @@ impl PBHouse {
             "\n -----                          DM Notes                          -----".to_string(),
         );
         pb_house_desc.push(format!(
-            "\n Establishment History: The {} is {}. {}. {}.",
+            "\n Establishment History: \n * The {} is {}. \n * {}. \n * {}.",
             self.name,
             get_establishment_history_age(),
             get_establishment_appearance(),
@@ -145,7 +145,7 @@ impl PBHouse {
         let red_light_services_list = get_red_light_services_list();
         if red_light_services_list.is_some() {
             pb_house_desc.push(format!(
-                "\n Red Light Services: {}",
+                "\n\n Red Light Services: {}",
                 red_light_services_list.expect("Should always be String.")
             ))
         };
