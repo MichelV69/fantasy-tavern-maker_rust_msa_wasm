@@ -16,11 +16,14 @@ mod dice_bag;
 mod enums;
 mod functions;
 mod structs;
+mod npc_maker;
 
 use crate::enums::List::*;
 use crate::structs::List::*;
 use dice_bag::*;
 use functions::*;
+
+use npc_maker::*;
 
 // ---
 trait StatSheet {
@@ -151,8 +154,12 @@ impl PBHouse {
         };
 
         /*
-        Red Light Services:  (Brothel Services (DC11)) (Smuggling (DC16))
-        (Thief / Assassin Guild (ADV w/Thieves Cant) (DC27))
+          -----                  Notable Staff & Patrons                  -----
+        Staff : (Character) is the Owner. They are a male human; average height (3%) and
+        stout (+13%). They are hazel-eyed, with their white hair kept in long curls.
+        [GM Notes: They consider themselves hetro.  (Quirks:  They have a slight scar on
+        their right shoulder.  They are often distrustful of adventurers. ) Particularly
+        Good At: [(Int) Arcana: +2] Particularly Bad At: [(Wis) Animal Handling: -3]]
 
         pb_house_desc.push(format!(" lore ipsum: {}", "Muspi erol");
         */
