@@ -19,13 +19,7 @@ use crate::enums::List::*;
 use crate::structs::List::*;
 
 pub fn get_app_version() -> String {
-    let output = r#"
-    <h1>Fantasy Tavern Maker</h1>
-    <h2>Version 0.5.0</h2>
-    <p>By 'Michel R Vaillancourt' michel@wolfstar.ca</p>
-    "#;
-
-    output.into()
+    "0.5.0".into()
 }
 
 pub fn trim_whitespace(s: String) -> String {

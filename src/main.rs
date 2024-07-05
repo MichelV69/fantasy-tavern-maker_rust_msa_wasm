@@ -6,6 +6,8 @@
 // --- rocket stuff
 #[macro_use]
 extern crate rocket;
+use rocket::http::ContentType;
+use tera::{Context, Tera};
 // --- rocket stuff
 
 use is_vowel::*;
@@ -183,12 +185,26 @@ fn index() -> String {
 }
 
 #[get("/version")]
-fn version() -> String {
-    get_app_version()
+fn version() -> (ContentType, String) {
+    let mut tera = Tera::default();
+
+    tera.add_template_file("./templates/version.html", Some("version.html"))
+        .unwrap();
+    let mut context = Context::new();
+    context.insert("version", &get_app_version());
+    (
+        ContentType::HTML,
+        tera.render("version.html", &context)
+            .expect("Vaild Tera Template"),
+    )
 }
 
 #[launch]
 fn rocket() -> _ {
+    println!(
+        ">>>  Booted Directory: [{}]",
+        std::env::current_dir().unwrap().display()
+    );
     rocket::build()
         .mount("/", routes![index])
         .mount("/", routes![version])
