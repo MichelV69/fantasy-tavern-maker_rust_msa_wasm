@@ -7,8 +7,6 @@
 #[macro_use]
 extern crate rocket;
 use rocket::fs::FileServer;
-use rocket::http::ContentType;
-use tera::{Context, Tera};
 // --- rocket stuff
 
 use is_vowel::*;
@@ -24,9 +22,11 @@ mod dice_bag;
 mod enums;
 mod fantasy_npc;
 mod functions;
+mod launch_pad;
 mod structs;
 
 use crate::enums::List::*;
+use crate::launch_pad::*;
 use crate::structs::List::*;
 
 use dice_bag::*;
@@ -200,45 +200,6 @@ impl PBHouse {
 }
 
 // ---
-// Rocket Routes for the App
-#[get("/")]
-fn index() -> (ContentType, String) {
-    let this_pb = PBHouse::new();
-    let app = App::new();
-    let mut tera = Tera::default();
-    let mut context = Context::new();
-
-    tera.add_template_file("content/templates/index.html", Some("index.html"))
-        .unwrap();
-
-    context.insert("app_name", &"Fantasy Tavern Maker");
-    context.insert("page_title", &"Example Output");
-    context.insert("pb_name", &this_pb.name);
-
-    (
-        ContentType::HTML,
-        tera.render("index.html", &context)
-            .expect("Vaild Tera Template"),
-    )
-}
-
-#[get("/version")]
-fn version() -> (ContentType, String) {
-    let mut tera = Tera::default();
-
-    tera.add_template_file("content/templates/version.html", Some("version.html"))
-        .unwrap();
-    let mut context = Context::new();
-    let app = App::new();
-    context.insert("app_name", &app.name);
-    context.insert("app_version", &app.get_version());
-    context.insert("page_title", &"App Version");
-    (
-        ContentType::HTML,
-        tera.render("version.html", &context)
-            .expect("Vaild Tera Template"),
-    )
-}
 
 #[launch]
 fn rocket() -> _ {

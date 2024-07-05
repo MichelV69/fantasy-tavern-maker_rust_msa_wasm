@@ -1,6 +1,7 @@
 // ---- start of file ----
 pub mod List {
 
+    use rocket::serde::Serialize;
     use strum::IntoEnumIterator;
     use strum_macros::Display;
     use strum_macros::EnumIter;
@@ -114,7 +115,7 @@ pub mod List {
         MagicOrbsAndCrystals,
     }
 
-    #[derive(Debug, Display, RandGen, Clone, Copy)]
+    #[derive(Debug, Display, RandGen, Clone, Copy, Serialize)]
     pub enum EstablishmentQualityLevel {
         Squalid,
         Poor,
@@ -124,7 +125,7 @@ pub mod List {
         Aristocratic,
     }
     // ---
-    #[derive(Debug, Display, RandGen)]
+    #[derive(Debug, Display, RandGen, Serialize)]
     pub enum SizeList {
         Tiny,
         Small,
@@ -133,7 +134,7 @@ pub mod List {
         Massive,
     }
 
-    #[derive(Debug, Display)]
+    #[derive(Debug, Display, Serialize)]
     pub enum BedTypeList {
         Hammocks,
         BunkBeds,

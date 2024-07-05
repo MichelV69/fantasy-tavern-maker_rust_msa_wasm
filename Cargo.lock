@@ -375,6 +375,7 @@ dependencies = [
  "rand_derive2",
  "random",
  "rocket",
+ "serde",
  "strum",
  "strum_macros",
  "tera",
