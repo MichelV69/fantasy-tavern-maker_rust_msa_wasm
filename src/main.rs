@@ -4,7 +4,8 @@
 #![allow(unused_mut)]
 
 // --- rocket stuff
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate rocket;
 // --- rocket stuff
 
 use is_vowel::*;
@@ -176,18 +177,26 @@ impl PBHouse {
 // ---
 // Rocket Routes for the App
 #[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
+fn index() -> String {
+    let plain_text: String = app();
+    plain_text
+}
+
+#[get("/version")]
+fn version() -> String {
+    get_app_version()
 }
 
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+    rocket::build()
+        .mount("/", routes![index])
+        .mount("/", routes![version])
 }
 
-    // ---
-    fn app() {
-        // let pub_and_bed_house = PBHouse::new();
-        // println!("\n \n {} \n \n", pub_and_bed_house);
-    }
+// ---
+fn app() -> String {
+    let pub_and_bed_house = PBHouse::new();
+    format!("\n \n {} \n \n", pub_and_bed_house)
+}
 // --- eof ---

@@ -18,6 +18,16 @@ use strum_macros::{Display, EnumString};
 use crate::enums::List::*;
 use crate::structs::List::*;
 
+pub fn get_app_version() -> String {
+    let output = r#"
+    <h1>Fantasy Tavern Maker</h1>
+    <h2>Version 0.5.0</h2>
+    <p>By 'Michel R Vaillancourt' michel@wolfstar.ca</p>
+    "#;
+
+    output.into()
+}
+
 pub fn trim_whitespace(s: String) -> String {
     let words: Vec<_> = s.split_whitespace().collect();
     words.join(" ")
