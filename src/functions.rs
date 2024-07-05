@@ -18,10 +18,6 @@ use strum_macros::{Display, EnumString};
 use crate::enums::List::*;
 use crate::structs::List::*;
 
-pub fn get_app_version() -> String {
-    "0.5.0".into()
-}
-
 pub fn trim_whitespace(s: String) -> String {
     let words: Vec<_> = s.split_whitespace().collect();
     words.join(" ")

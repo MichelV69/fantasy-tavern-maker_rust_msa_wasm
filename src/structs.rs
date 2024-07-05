@@ -7,6 +7,15 @@ pub mod List {
     use strum_macros::EnumString;
 
     use crate::enums::List::*;
+
+    #[derive(Debug)]
+    pub struct App {
+        pub name: String,
+        pub version_major: i8,
+        pub version_minor: i8,
+        pub version_fix: i8,
+    }
+
     #[derive(Debug)]
     pub struct PBHouse {
         pub name: String,

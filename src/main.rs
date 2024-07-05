@@ -6,6 +6,7 @@
 // --- rocket stuff
 #[macro_use]
 extern crate rocket;
+use rocket::fs::FileServer;
 use rocket::http::ContentType;
 use tera::{Context, Tera};
 // --- rocket stuff
@@ -27,16 +28,38 @@ mod structs;
 
 use crate::enums::List::*;
 use crate::structs::List::*;
+
 use dice_bag::*;
 use functions::*;
 
 use fantasy_npc::Maker::*;
 
 // ---
-trait StatSheet {
-    fn stat_data() -> String;
+trait AppFn {
+    fn get_version(&self) -> String;
 }
 
+impl AppFn for App {
+    fn get_version(&self) -> String {
+        format!(
+            "{}.{}.{}",
+            self.version_major, self.version_minor, self.version_fix
+        )
+    }
+}
+
+impl App {
+    fn new() -> Self {
+        App {
+            name: "Fantasy Tavern Maker".into(),
+            version_major: 0,
+            version_minor: 6,
+            version_fix: 0,
+        }
+    }
+}
+
+// ---
 impl PBHouse {
     fn new() -> Self {
         let eql = get_establishment_quality();
@@ -179,19 +202,37 @@ impl PBHouse {
 // ---
 // Rocket Routes for the App
 #[get("/")]
-fn index() -> String {
-    let plain_text: String = app();
-    plain_text
+fn index() -> (ContentType, String) {
+    let this_pb = PBHouse::new();
+    let app = App::new();
+    let mut tera = Tera::default();
+    let mut context = Context::new();
+
+    tera.add_template_file("content/templates/index.html", Some("index.html"))
+        .unwrap();
+
+    context.insert("app_name", &"Fantasy Tavern Maker");
+    context.insert("page_title", &"Example Output");
+    context.insert("pb_name", &this_pb.name);
+
+    (
+        ContentType::HTML,
+        tera.render("index.html", &context)
+            .expect("Vaild Tera Template"),
+    )
 }
 
 #[get("/version")]
 fn version() -> (ContentType, String) {
     let mut tera = Tera::default();
 
-    tera.add_template_file("./templates/version.html", Some("version.html"))
+    tera.add_template_file("content/templates/version.html", Some("version.html"))
         .unwrap();
     let mut context = Context::new();
-    context.insert("version", &get_app_version());
+    let app = App::new();
+    context.insert("app_name", &app.name);
+    context.insert("app_version", &app.get_version());
+    context.insert("page_title", &"App Version");
     (
         ContentType::HTML,
         tera.render("version.html", &context)
@@ -203,11 +244,12 @@ fn version() -> (ContentType, String) {
 fn rocket() -> _ {
     println!(
         ">>>  Booted Directory: [{}]",
-        std::env::current_dir().unwrap().display()
+        std::env::current_dir().expect("STD ENV info").display()
     );
     rocket::build()
         .mount("/", routes![index])
         .mount("/", routes![version])
+        .mount("/styles", FileServer::from("content/css"))
 }
 
 // ---

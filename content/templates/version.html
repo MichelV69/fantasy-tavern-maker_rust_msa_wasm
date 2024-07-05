@@ -7,17 +7,18 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title></title>
+        <title>{{ app_name }} - {{page_title}}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href="/styles/app.css">
+        <link rel="stylesheet" href="/styles/version.css">
     </head>
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <h1>Application Version</h1>
-        <p>App version is {{ version }}.</p>
+        <h1>{{ app_name }} - {{page_title}}</h1>
+        <p>App version is {{ app_version }}.</p>
         <script src="" async defer></script>
     </body>
 </html>
