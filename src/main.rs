@@ -3,6 +3,10 @@
 #![allow(unused_imports)]
 #![allow(unused_mut)]
 
+// --- rocket stuff
+#[macro_use] extern crate rocket;
+// --- rocket stuff
+
 use is_vowel::*;
 use rand::prelude::*;
 use rand_derive2::RandGen;
@@ -14,9 +18,9 @@ use tracing::info;
 // ---
 mod dice_bag;
 mod enums;
+mod fantasy_npc;
 mod functions;
 mod structs;
-mod fantasy_npc;
 
 use crate::enums::List::*;
 use crate::structs::List::*;
@@ -170,12 +174,20 @@ impl PBHouse {
 }
 
 // ---
-fn main() {
-    info!("--- start of output ---");
-
-    let pub_and_bed_house = PBHouse::new();
-    println!("\n \n {} \n \n", pub_and_bed_house);
-
-    info!("--- end of output ---");
+// Rocket Routes for the App
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, world!"
 }
+
+#[launch]
+fn rocket() -> _ {
+    rocket::build().mount("/", routes![index])
+}
+
+    // ---
+    fn app() {
+        // let pub_and_bed_house = PBHouse::new();
+        // println!("\n \n {} \n \n", pub_and_bed_house);
+    }
 // --- eof ---
