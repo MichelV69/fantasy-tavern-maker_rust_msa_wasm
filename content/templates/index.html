@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{ app_name }} - {{page_title}}</title>
-    <meta name="description" content="">
+    <meta name="description" content="rocket.rs">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/styles/app.css">
     <link rel="stylesheet" href="/styles/index.css">
@@ -20,9 +20,27 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
     <h1>{{ app_name }} - {{page_title}}</h1>
-    <h2>{{ this_pb.name }}</h2>
-    <p>The "{{ this_pb.name }}"" is the local Pub and Bed House for travellers
-        in this area.</p>
+    <h2>{{ pb_name }}</h2>
+
+    <h3>General Description</h3>
+    <p>
+        {% for line in pb_general_info %}
+            {{line}}
+        {% endfor %}
+    </p>
+
+    <h3>History</h3>
+    {% for line in pb_history_profile %}
+        {{line| safe}}
+    {% endfor %}
+
+    {% if redlight_profile %}
+    <h3>Redlight / Underworld Services</h3>
+    {% for line in redlight_profile %}
+        {{line | safe}}
+    {% endfor %}
+    {% endif %}
+
     <script src="" async defer></script>
 </body>
 

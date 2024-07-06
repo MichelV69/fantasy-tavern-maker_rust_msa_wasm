@@ -79,16 +79,39 @@ impl PBHouse {
 
 impl fmt::Display for PBHouse {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        for line in &self.stat_data() {
+        write!(
+            f,
+            "{}",
+            "\n-----                        Player Blurb                        -----"
+        )?;
+        for line in &self.general_info() {
             write!(f, "{}", line)?;
         }
+
+        write!(
+            f,
+            "{}",
+            "\n -----                          DM Notes                          -----"
+        )?;
+        for line in &self.history_profile() {
+            write!(f, "{}", line)?;
+        }
+
+        for line in &self.redlight_profile() {
+            write!(f, "{}", line)?;
+        }
+
+        for line in &self.staff_and_customers() {
+            write!(f, "{}", line)?;
+        }
+
         Ok(())
     }
 }
 
 // ---
 impl PBHouse {
-    fn stat_data(&self) -> Vec<String> {
+    fn general_info(&self) -> Vec<String> {
         let mut pb_house_desc: Vec<String> = Vec::with_capacity(22);
         // ---
         let mut first_char = self
@@ -103,11 +126,6 @@ impl PBHouse {
         } else {
             "a"
         };
-
-        pb_house_desc.push(
-            "\n-----                        Player Blurb                        -----".to_string(),
-        );
-        pb_house_desc.push("\n \n ".to_string());
 
         pb_house_desc.push(format!(
             "'The {}' is the local Pub and Bed House for travellers in this area.",
@@ -163,26 +181,40 @@ impl PBHouse {
             " while the House specialty dish is {}, for {}.",
             self.house_dish.desc, self.house_dish.price
         ));
+        // ---
+        pb_house_desc
+    }
 
-        pb_house_desc.push("\n \n ".to_string());
-        pb_house_desc.push(
-            "\n -----                          DM Notes                          -----".to_string(),
-        );
+    fn history_profile(&self) -> Vec<String> {
+        let mut pb_house_desc: Vec<String> = Vec::with_capacity(22);
+
         pb_house_desc.push(format!(
-            "\n Establishment History: \n * The {} is {}. \n * {}. \n * {}.",
+            "* The {} is {}. \n * {}. \n * {}.",
             self.name,
             get_establishment_history_age(),
             get_establishment_appearance(),
             get_establishment_reputation()
         ));
+
+        // ---
+        pb_house_desc
+    }
+
+    fn redlight_profile(&self) -> Vec<String> {
+        let mut pb_house_desc: Vec<String> = Vec::with_capacity(22);
         let red_light_services_list = get_red_light_services_list();
         if red_light_services_list.is_some() {
             pb_house_desc.push(format!(
-                "\n\n Red Light Services: {}",
+                "{}",
                 red_light_services_list.expect("Should always be String.")
             ))
-        };
+        }
+        // ---
+        pb_house_desc
+    }
 
+    fn staff_and_customers(&self) -> Vec<String> {
+        let mut pb_house_desc: Vec<String> = Vec::with_capacity(22);
         /*
           -----                  Notable Staff & Patrons                  -----
         Staff : (Character) is the Owner. They are a male human; average height (3%) and
@@ -197,9 +229,9 @@ impl PBHouse {
         // ---
         pb_house_desc
     }
-}
+} // --- impl PBHouse
 
-// ---
+// --- web server code
 
 #[launch]
 fn rocket() -> _ {
@@ -213,7 +245,7 @@ fn rocket() -> _ {
         .mount("/styles", FileServer::from("content/css"))
 }
 
-// ---
+// --- local cli code
 fn app() -> String {
     let pub_and_bed_house = PBHouse::new();
     format!("\n \n {} \n \n", pub_and_bed_house)

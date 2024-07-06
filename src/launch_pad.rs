@@ -2,6 +2,7 @@
 use crate::App;
 use crate::AppFn;
 use crate::PBHouse;
+use markdown::*;
 use rocket::fs::FileServer;
 use rocket::http::ContentType;
 use tera::{Context, Tera};
@@ -18,7 +19,22 @@ pub fn index() -> (ContentType, String) {
 
     context.insert("app_name", &"Fantasy Tavern Maker");
     context.insert("page_title", &"Example Output");
-    context.insert("this_pb", &this_pb);
+    context.insert("pb_name", &this_pb.name);
+    context.insert("pb_general_info", &this_pb.general_info());
+
+    let history_profile: Vec<String> = this_pb
+        .history_profile()
+        .into_iter()
+        .map(|line| to_html(&line))
+        .collect();
+    context.insert("pb_history_profile", &history_profile);
+
+    let redlight_profile: Vec<String> = this_pb
+        .redlight_profile()
+        .into_iter()
+        .map(|line| to_html(&line))
+        .collect();
+    context.insert("redlight_profile", &redlight_profile);
 
     (
         ContentType::HTML,

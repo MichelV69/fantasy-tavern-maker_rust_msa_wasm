@@ -485,7 +485,7 @@ pub fn get_red_light_services_list() -> Option<String> {
     for i in 1..=how_many_services {
         let result = &possible_services_table[table_weights.sample(&mut rng)];
         let new_service: String = <Tower::DiceResult as RollDice>::inline_replace(&format!(
-            "|{} (DC [{}])|",
+            " * {} (DC [{}]) \n",
             result.description, result.dc_dice_roll
         ));
         red_light_services_list = format!("{} {}", red_light_services_list, new_service);
