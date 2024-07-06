@@ -20,7 +20,13 @@ pub fn index() -> (ContentType, String) {
     context.insert("app_name", &"Fantasy Tavern Maker");
     context.insert("page_title", &"Example Output");
     context.insert("pb_name", &this_pb.name);
-    context.insert("pb_general_info", &this_pb.general_info());
+
+    let pb_general_info: Vec<String> = this_pb
+        .general_info()
+        .into_iter()
+        .map(|line| to_html(&line))
+        .collect();
+    context.insert("pb_general_info", &pb_general_info);
 
     let history_profile: Vec<String> = this_pb
         .history_profile()

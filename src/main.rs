@@ -128,12 +128,12 @@ impl PBHouse {
         };
 
         pb_house_desc.push(format!(
-            "'The {}' is the local Pub and Bed House for travellers in this area.",
+            "'The {}' is the local Pub and Bed House for travellers in this area. \n",
             self.name
         ));
 
         pb_house_desc.push(format!(
-            " The {}-quality establishment would be considered {}, with {} tables.",
+            " The {}-quality establishment would be considered {}, with {} tables. \n",
             trim_whitespace(enum_string_to_phase(
                 self.establishment_quality.level.to_string()
             )),
@@ -152,7 +152,7 @@ impl PBHouse {
         ));
 
         pb_house_desc.push(format!(
-            " Rooms are {} per day, and meals are {} per day.",
+            " Rooms are {} per day, and meals are {} per day. \n",
             self.establishment_quality.rooms, self.establishment_quality.meals
         ));
 
@@ -163,7 +163,7 @@ impl PBHouse {
         ));
 
         pb_house_desc.push(format!(
-            " The current patrons seem to be {prep} {} bunch, {}.",
+            " The current patrons seem to be {prep} {} bunch, {}. \n",
             self.mood, self.lighting
         ));
 
@@ -178,7 +178,7 @@ impl PBHouse {
         ));
 
         pb_house_desc.push(format!(
-            " while the House specialty dish is {}, for {}.",
+            " while the House specialty dish is {}, for {}. \n",
             self.house_dish.desc, self.house_dish.price
         ));
         // ---
