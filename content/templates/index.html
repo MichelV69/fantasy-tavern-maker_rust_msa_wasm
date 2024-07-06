@@ -11,6 +11,10 @@
     <title>{{ app_name }} - {{page_title}}</title>
     <meta name="description" content="rocket.rs">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Amaranth:ital@0;1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/styles/app.css">
     <link rel="stylesheet" href="/styles/index.css">
 </head>
@@ -22,20 +26,21 @@
     <h1>{{ app_name }} - {{page_title}}</h1>
     <h2>{{ pb_name }}</h2>
 
-    <h3>General Description</h3>
-    <p>
-        {% for line in pb_general_info %}
-            {{line}}
-        {% endfor %}
-    </p>
+    <h3>General Description <span class="player_caption"> (Read to Players)</span></h3>
 
-    <h3>History</h3>
+    <blockquote>
+    {% for line in pb_general_info %}
+    {{line | safe}}
+    {% endfor %}
+    </blockquote>
+
+    <h3>History <span class="GM_caption"> (GM Only)</span></h3>
     {% for line in pb_history_profile %}
-        {{line| safe}}
+        {{line | safe}}
     {% endfor %}
 
     {% if redlight_profile %}
-    <h3>Redlight / Underworld Services</h3>
+    <h3>Redlight / Underworld Services <span class="GM_caption"> (GM Only, Rolls Required)</span></h3>
     {% for line in redlight_profile %}
         {{line | safe}}
     {% endfor %}

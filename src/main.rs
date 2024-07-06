@@ -127,60 +127,51 @@ impl PBHouse {
             "a"
         };
 
-        pb_house_desc.push(format!(
-            "'The {}' is the local Pub and Bed House for travellers in this area. \n",
-            self.name
-        ));
-
-        pb_house_desc.push(format!(
-            " The {}-quality establishment would be considered {}, with {} tables. \n",
+        let para1: String = format!(
+            "'*The {}*' is the local Pub and Bed House for travellers in this area.
+            The {}-quality establishment would be considered {}, with {} tables.",
+            self.name,
             trim_whitespace(enum_string_to_phase(
                 self.establishment_quality.level.to_string()
             )),
             trim_whitespace(enum_string_to_phase(self.size.size_description.to_string())),
             self.size.table_count
-        ));
+        );
+        pb_house_desc.push(para1);
 
         let bed_type_name = if self.size.common_bed_count == 1 {
             to_singular(&tidy(self.size.common_bed_type.to_string()))
         } else {
             tidy(self.size.common_bed_type.to_string())
         };
-        pb_house_desc.push(format!(
-            " It has {} {} in the common room and {} private rooms.",
-            self.size.common_bed_count, bed_type_name, self.size.private_room_count
-        ));
+        let para2: String = format!(
+            "It has {} {} in the common room and {} private rooms.
+            Rooms are *{}* per day, and meals are *{}* per day.",
+            self.size.common_bed_count,
+            bed_type_name,
+            self.size.private_room_count,
+            self.establishment_quality.rooms,
+            self.establishment_quality.meals
+        );
+        pb_house_desc.push(para2);
 
-        pb_house_desc.push(format!(
-            " Rooms are {} per day, and meals are {} per day. \n",
-            self.establishment_quality.rooms, self.establishment_quality.meals
-        ));
+        let para3: String = format!(
+            "As you enter, the air is full of the scents of {}. The current patrons seem to be {prep} {} bunch, {}. {}",
+            self.smells, self.mood, self.lighting, self.posted_sign.clone()
+        );
+        pb_house_desc.push(para3);
 
-        pb_house_desc.push("\n \n ".to_string());
-        pb_house_desc.push(format!(
-            " As you enter, the air is full of the scents of {}.",
-            self.smells
-        ));
+        let para4: String = format!(
+            "The menu has the usual standard fare posted.
+            The House specialty beverage is {}, for {},
+            while the House specialty dish is {}, for {}.",
+            self.house_drink.desc,
+            self.house_drink.price,
+            self.house_dish.desc,
+            self.house_dish.price
+        );
+        pb_house_desc.push(para4);
 
-        pb_house_desc.push(format!(
-            " The current patrons seem to be {prep} {} bunch, {}. \n",
-            self.mood, self.lighting
-        ));
-
-        pb_house_desc.push(self.posted_sign.clone()); // NB: I don't trust this
-
-        pb_house_desc.push("\n \n ".to_string());
-        pb_house_desc.push("The menu has the usual standard fare posted.".to_string());
-
-        pb_house_desc.push(format!(
-            " The House specialty beverage is {}, for {},",
-            self.house_drink.desc, self.house_drink.price
-        ));
-
-        pb_house_desc.push(format!(
-            " while the House specialty dish is {}, for {}. \n",
-            self.house_dish.desc, self.house_dish.price
-        ));
         // ---
         pb_house_desc
     }
@@ -189,7 +180,7 @@ impl PBHouse {
         let mut pb_house_desc: Vec<String> = Vec::with_capacity(22);
 
         pb_house_desc.push(format!(
-            "* The {} is {}. \n * {}. \n * {}.",
+            "* The *{}* is {}. \n * {}. \n * {}.",
             self.name,
             get_establishment_history_age(),
             get_establishment_appearance(),

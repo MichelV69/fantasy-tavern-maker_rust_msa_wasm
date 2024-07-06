@@ -4,4 +4,25 @@ body {
     padding: 10px;
     width: 800px;
         border: 2px solid black;
+    font-family: "Amaranth", sans-serif;
+        font-weight: 32;
+        font-style: normal;
+        color: navy;
+}
+blockquote {
+    border-left: 5px solid darkgreen;
+    margin: 1.5em 10px;
+    padding: 0.5em 10px;
+}
+
+h1 {
+    font-family: "MedievalSharp", cursive;
+    font-weight: 52;
+    font-style: normal;
+}
+
+h2 {
+    font-family: "MedievalSharp", cursive;
+    font-weight: 48;
+    font-style: normal;
 }

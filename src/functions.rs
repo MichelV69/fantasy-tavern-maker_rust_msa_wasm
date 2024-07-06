@@ -129,7 +129,7 @@ pub fn get_posted_sign() -> String {
     };
 
     let result = format!(
-        " A sign {} says '{}'.",
+        " A sign {} says _'{}'_.",
         sign_location_text,
         sign_message_text.to_capitalized()
     );

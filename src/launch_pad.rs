@@ -2,7 +2,9 @@
 use crate::App;
 use crate::AppFn;
 use crate::PBHouse;
-use markdown::*;
+use markdown::{
+    to_html_with_options, CompileOptions, Constructs, LineEnding, Options, ParseOptions,
+};
 use rocket::fs::FileServer;
 use rocket::http::ContentType;
 use tera::{Context, Tera};
@@ -21,24 +23,25 @@ pub fn index() -> (ContentType, String) {
     context.insert("page_title", &"Example Output");
     context.insert("pb_name", &this_pb.name);
 
+    let lf = LineEnding::LineFeed;
     let pb_general_info: Vec<String> = this_pb
         .general_info()
         .into_iter()
-        .map(|line| to_html(&line))
+        .map(|line| markdown::to_html(&line))
         .collect();
     context.insert("pb_general_info", &pb_general_info);
 
     let history_profile: Vec<String> = this_pb
         .history_profile()
         .into_iter()
-        .map(|line| to_html(&line))
+        .map(|line| markdown::to_html(&line))
         .collect();
     context.insert("pb_history_profile", &history_profile);
 
     let redlight_profile: Vec<String> = this_pb
         .redlight_profile()
         .into_iter()
-        .map(|line| to_html(&line))
+        .map(|line| markdown::to_html(&line))
         .collect();
     context.insert("redlight_profile", &redlight_profile);
 

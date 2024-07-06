@@ -1,0 +1,18 @@
+.player_caption {
+   color :darkgreen;
+   font-style: italic;
+   font-size: smaller;
+}
+
+.GM_caption {
+    color: darkred;
+    font-style: italic;
+    font-size: smaller;
+}
+
+blockquote {
+    font-family: "Amaranth", sans-serif;
+        font-size: larger;
+        font-style: normal;
+        color: antiquewhite;
+}
