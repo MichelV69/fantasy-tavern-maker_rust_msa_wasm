@@ -1,9 +1,9 @@
-FROM nixos/nixos/nix AS init
+FROM rust:latest
+
 WORKDIR /dockerspace
-RUN mkdir -p /dockerspace/content/css
-RUN mkdir -p /dockerspace/content/images
-RUN mkdir -p /dockerspace/content/templates
-COPY content/* /dockerspace/content/*
-COPY target/debug/fantasy-tavern-maker_rust_msa_wasm /dockerspace/
+COPY . .
+RUN "rustup component add rustfmt"
+RUN "curl -L --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/cargo-bins/cargo-binstall/main/install-from-binstall-release.sh | bash"
+RUN "cargo binstall cargo-watch -y"
 EXPOSE 9021
-CMD ["fantasy-tavern-maker_rust_msa_wasm"]
+CMD [" cargo watch -x check -x test -x fmt -x run --ignore 'content/*'"]
