@@ -1,4 +1,20 @@
 //--- start of file ---
+use crate::RandGen;
+use rocket::fs::FileServer;
+use rocket::launch;
+
+#[launch]
+fn rocket() -> _ {
+    println!(
+        ">>>  Booted Directory: [{}]",
+        std::env::current_dir().expect("STD ENV info").display()
+    );
+    rocket::build()
+        .configure(rocket::Config::figment().merge(("port", 8002)))
+        .mount("/", routes![index])
+//        .mount("/", routes![version])
+        .mount("/styles", FileServer::from("content/css"))
+}
 
 // --- tests
 #[cfg(test)]
@@ -12,8 +28,6 @@ mod tests {
     // randomize race
 } // mod tests
 
-pub mod Maker {
-    use crate::RandGen;
     use strum::Display;
     use strum::EnumIter;
     use variant_count::VariantCount;
@@ -68,7 +82,4 @@ pub mod Maker {
     enum RaceCodeList {}
 
     // --- implimentations
-
-    // --- functions
-} // pub mod Maker
   //--- end of file ---
