@@ -2,6 +2,7 @@
 #![allow(unused_variables)]
 #![allow(unused_imports)]
 #![allow(unused_mut)]
+#![allow(non_snake_case)]
 
 // --- rocket stuff
 #[macro_use]
@@ -16,19 +17,21 @@ use inflector::string::singularize::to_singular;
 use std::fmt;
 use tracing::info;
 
-// ---
-mod dice_bag;
-mod enums;
+// --- my stuff ---
 mod functions;
-mod launch_pad;
-mod structs;
+use functions::*;
 
+mod enums;
 use crate::enums::List::*;
+
+mod launch_pad;
 use crate::launch_pad::*;
+
+mod structs;
 use crate::structs::List::*;
 
+mod dice_bag;
 use dice_bag::*;
-use functions::*;
 
 // ---
 trait AppFn {
@@ -219,7 +222,6 @@ impl PBHouse {
 } // --- impl PBHouse
 
 // --- web server code
-
 #[launch]
 fn rocket() -> _ {
     println!(
@@ -227,6 +229,7 @@ fn rocket() -> _ {
         std::env::current_dir().expect("STD ENV info").display()
     );
     rocket::build()
+        .configure(rocket::Config::figment().merge(("port", 8001)))
         .mount("/", routes![index])
         .mount("/", routes![version])
         .mount("/styles", FileServer::from("content/css"))

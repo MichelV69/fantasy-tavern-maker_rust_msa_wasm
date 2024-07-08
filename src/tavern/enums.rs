@@ -10,10 +10,8 @@ pub mod List {
     use is_vowel::*;
     use rand::prelude::*;
     use rand_derive2::RandGen;
-
     use std::fmt;
 
-    // ---
     extern crate variant_count;
     use variant_count::VariantCount;
     // ---
