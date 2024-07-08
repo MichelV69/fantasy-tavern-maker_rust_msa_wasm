@@ -11,12 +11,13 @@ COPY --from=planner /app/recipe.json recipe.json
 RUN cargo chef cook --release --recipe-path recipe.json
 # Build application
 COPY . .
-RUN cargo build --release --bin fantasy-tavern-maker_rust_msa_wasm
+RUN cargo build --release --bin tavern
 
 # We do not need the Rust toolchain to run the binary!
 FROM debian:bookworm-slim AS runtime
 WORKDIR /app
 COPY content ./content
-COPY --from=builder /app/target/release/fantasy-tavern-maker_rust_msa_wasm .
+COPY --from=builder /app/target/release/tavern .
 #CMD [ "bash" ]
-ENTRYPOINT ["./fantasy-tavern-maker_rust_msa_wasm"]
+EXPOSE 8000
+ENTRYPOINT ["./tavern"]

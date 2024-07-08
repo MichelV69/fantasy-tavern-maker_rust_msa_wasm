@@ -11,7 +11,7 @@ use rocket::fs::FileServer;
 
 use is_vowel::*;
 use rand::prelude::*;
-use rand_derive2::RandGen;
+//use rand_derive2::RandGen;
 
 use inflector::string::singularize::to_singular;
 use std::fmt;
@@ -20,7 +20,6 @@ use tracing::info;
 // ---
 mod dice_bag;
 mod enums;
-mod fantasy_npc;
 mod functions;
 mod launch_pad;
 mod structs;
@@ -31,8 +30,6 @@ use crate::structs::List::*;
 
 use dice_bag::*;
 use functions::*;
-
-use fantasy_npc::Maker::*;
 
 // ---
 trait AppFn {
