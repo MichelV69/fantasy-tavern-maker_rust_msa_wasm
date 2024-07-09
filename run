@@ -1,1 +1,0 @@
-clear && rustfmt ./src/*.rs ./src/fantasy_npc/*.rs && cargo run
