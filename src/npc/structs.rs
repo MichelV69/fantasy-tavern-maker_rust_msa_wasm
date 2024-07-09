@@ -1,15 +1,17 @@
 // --- structs
 pub mod List {
-    struct Tombstone<'a> {
-        char_type: TypeCodeList,
-        gender: GenderCodeList,
-        partner_preference: PartnerPreferenceCodeList,
-        public_name: &'a str,
-        task_desc: &'a str,
-        race: RaceCodeList,
+    use crate::enums::List::*;
+
+    pub struct Tombstone<'a> {
+        pub char_type: TypeCodeList,
+        pub gender: GenderCodeList,
+        pub partner_preference: PartnerPreferenceCodeList,
+        pub public_name: &'a str,
+        pub task_desc: &'a str,
+        pub race: RaceCodeList,
     }
 
-    struct RpDetails<'a> {
+    pub struct RpDetails<'a> {
         height_desc: &'a str,
         build_desc: &'a str,
         hair_color: &'a str,
@@ -22,7 +24,7 @@ pub mod List {
         schtick_ability_description: &'a str,
     }
 
-    struct Sheet<'a> {
+    pub struct Sheet<'a> {
         top: Tombstone<'a>,
         bottom: RpDetails<'a>,
     }
