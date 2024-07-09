@@ -67,6 +67,15 @@ pub mod List {
         }
     }
 
+    impl HasWeightedRandom for PartnerPreferenceCodeList {
+        fn weighted_random() -> Self {
+            let table_weights =
+                WeightedIndex::new(PartnerPreferenceCodeList::iter().map(|item| item.get_weight())).unwrap();
+            let mut rng = thread_rng();
+            PartnerPreferenceCodeList::VARIANTS[table_weights.sample(&mut rng)]
+        }
+    }
+
 } // pub mod List
 
 // ---- end of file ----

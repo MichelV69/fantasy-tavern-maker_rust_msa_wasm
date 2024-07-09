@@ -89,7 +89,14 @@ mod tests {
         assert_eq!(test.gender, new_gender);
     }
 
-    // randomize partner_preference
+    #[test]
+    fn randomize_partner_preference(){
+        let mut test = Tombstone::new();
+        let new_partner_preference = PartnerPreferenceCodeList::weighted_random();
+        test.partner_preference = new_partner_preference;
+        assert_eq!(test.partner_preference, new_partner_preference);
+    }
+
     // randomize public_name
     // randomize task_desc
     //

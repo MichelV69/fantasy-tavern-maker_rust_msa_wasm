@@ -22,7 +22,7 @@ pub mod List {
         Androgenous,
     }
 
-    #[derive(PartialEq, Debug)]
+    #[derive(PartialEq, Debug, EnumIter, VariantArray, Clone, Copy)]
     pub enum PartnerPreferenceCodeList {
         Hetro,
         GayLes,
