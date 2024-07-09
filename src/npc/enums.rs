@@ -14,12 +14,12 @@ pub mod List {
         StoryCharacter,
     }
 
-    #[derive(PartialEq, Debug)]
+    #[derive(PartialEq, Debug, VariantCount, EnumIter, Clone, Copy)]
     pub enum GenderCodeList {
-        Androgenous,
         Male,
         Female,
         NonBinary,
+        Androgenous,
     }
 
     #[derive(PartialEq, Debug)]

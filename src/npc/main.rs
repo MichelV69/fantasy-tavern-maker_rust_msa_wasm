@@ -81,11 +81,14 @@ mod tests {
          assert_eq!(test.race, new_race);
     }
 
-    // #[test]
-    // fn randomize_gender(){
-    //     let mut test = Tombstone::new();
-    //     let new_gender = GenderCodeList::weighted_random();
-    // }
+    #[test]
+    fn randomize_gender(){
+        let mut test = Tombstone::new();
+        let new_gender = GenderCodeList::weighted_random();
+        test.gender = new_gender;
+        assert_eq!(test.gender, new_gender);
+    }
+
     // randomize partner_preference
     // randomize public_name
     // randomize task_desc

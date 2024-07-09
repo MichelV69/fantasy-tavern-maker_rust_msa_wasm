@@ -5,7 +5,7 @@ pub mod List {
     use crate::traits::List::*;
     use rand::distributions::{WeightedIndex,Distribution};
     use rand::thread_rng;
-    use strum::{IntoEnumIterator,VariantArray};
+    use strum::{IntoEnumIterator,VariantArray, VariantMetadata, EnumString};
 
     impl Tombstone<'_> {
         pub fn new() -> Self {
@@ -52,15 +52,20 @@ pub mod List {
             let table_weights =
                 WeightedIndex::new(RaceCodeList::iter().map(|item| item.get_weight())).unwrap();
             let mut rng = thread_rng();
-            let buffer = RaceCodeList::VARIANTS[table_weights.sample(&mut rng)];
-            buffer
+            RaceCodeList::VARIANTS[table_weights.sample(&mut rng)]
         }
     }
 
-    // impl HasWeightedRandom for GenderCodeList {
-    //     fn weighted_random() -> Self {
-    //     }
-    // }
+    impl HasWeightedRandom for GenderCodeList {
+        fn weighted_random() -> Self {
+            let weights_vector = (1..=GenderCodeList::VARIANT_COUNT).collect::<Vec<usize>>(); // courtesy WGaffa (Twitch)
+            let dist = WeightedIndex::new(weights_vector).unwrap();
+
+            let mut rng = thread_rng();
+            let options_list: Vec<_> = GenderCodeList::iter().collect();
+            options_list[dist.sample(&mut rng)]
+        }
+    }
 
 } // pub mod List
 
