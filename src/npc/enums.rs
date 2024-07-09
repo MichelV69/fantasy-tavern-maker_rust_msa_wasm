@@ -42,5 +42,26 @@ pub mod List {
         Human,// 7
         Tiefling,// 1
     }
+
+    #[derive(PartialEq, Debug, EnumIter, VariantArray, Clone, Copy)]
+    pub enum TaskDescList {
+    Commonfolk, // 40 |
+    Noble, // accompanied by [1d4] entourage, //  5 |
+    Merchant, // accompanied by [1d4] guards, // 20 |
+    Tinker, // 20 |
+    Tailor, // 20 |
+    Soldier, // 10 |
+    Militiamun, // 20 |
+    Spy, //  5 |
+    Craftsperson, // 20 |
+    Tradesperson, // 20 |
+    Minstral, // 20 |
+    BountyHunter, // accompanied by [1d4] thugs, //  5 |
+    LayPriest, // 20 |
+    UtilityMage, // (Mend, Daylight, Message, etc), //  5 |
+    Courtesan, // accompanied by [1d4] entourage, //  5 |
+    Adventurer, // ([1d4+1] level) with [1d4] henchmen ([1d4-1] level), //  1 |
+    }
+
 }
 // ---- end of file ----

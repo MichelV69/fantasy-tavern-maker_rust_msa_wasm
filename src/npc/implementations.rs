@@ -13,9 +13,10 @@ pub mod List {
                 char_type: TypeCodeList::Drifter,
                 gender: GenderCodeList::Androgenous,
                 partner_preference: PartnerPreferenceCodeList::Hetro,
-                public_name: "Jane Q Publique",
-                task_desc: "Wandering Wanderer",
+                task_desc: TaskDescList::Commonfolk,
                 race: RaceCodeList::Human,
+                public_name: "Jane Q Publique",
+                other_notes: vec![],
             }
         }
     }
@@ -76,6 +77,50 @@ pub mod List {
         }
     }
 
+   impl Getable for TaskDescList {
+        fn get_weight(self) -> i16 {
+            match self {
+                TaskDescList::Commonfolk => 40,
+                TaskDescList::Noble => 5,//   accompanied by [1d4] entourage,
+                TaskDescList::Merchant =>  20 , // accompanied by [1d4] guards,
+                TaskDescList::Tinker => 20,
+                TaskDescList::Tailor => 20,
+                TaskDescList::Soldier => 10,
+                TaskDescList::Militiamun => 20,
+                TaskDescList::Spy => 5,
+                TaskDescList::Craftsperson => 20,
+                TaskDescList::Tradesperson => 20,
+                TaskDescList::Minstral => 20,
+                TaskDescList::BountyHunter => 5,  //accompanied by [1d4] thugs,
+                TaskDescList::LayPriest => 20,
+                TaskDescList::UtilityMage => 5,  //(can cast Mend, Daylight, Message, etc),
+                TaskDescList::Courtesan => 5,  //accompanied by [1d4] entourage,
+                TaskDescList::Adventurer => 1,  //([1d4+1] level) with [1d4] henchmen ([1d4-1] level),
+            }
+        }
+    }
+    impl HasWeightedRandom for TaskDescList {
+        fn weighted_random() -> Self {
+            let table_weights =
+                WeightedIndex::new(TaskDescList::iter().map(|item| item.get_weight())).unwrap();
+            let mut rng = thread_rng();
+            TaskDescList::VARIANTS[table_weights.sample(&mut rng)]
+        }
+    }
+
+    impl HasGetExtraNote for TaskDescList {
+        fn get_other_note(task_desc: TaskDescList) -> &'static str {
+            match task_desc {
+                TaskDescList::Noble => "accompanied by [1d4] entourage",
+                TaskDescList::Merchant =>  "accompanied by [1d4] guards",
+                TaskDescList::BountyHunter => "accompanied by [1d4] thugs",
+                TaskDescList::UtilityMage => "can cast Mend, Daylight, Message, etc",
+                TaskDescList::Courtesan => "accompanied by [1d4] entourage",
+                TaskDescList::Adventurer => "is [1d4+1] level with [1d4] henchmen of [1d4-1] level",
+                _ => "",
+            }.into()
+        }
+    }
 } // pub mod List
 
 // ---- end of file ----

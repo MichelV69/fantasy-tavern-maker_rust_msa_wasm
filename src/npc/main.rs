@@ -61,7 +61,7 @@ mod tests {
         assert_eq!(test.gender, GenderCodeList::Androgenous );
         assert_eq!(test.partner_preference, PartnerPreferenceCodeList::Hetro );
         assert_eq!(test.public_name, "Jane Q Publique" );
-        assert_eq!(test.task_desc, "Wandering Wanderer", );
+        assert_eq!(test.task_desc, TaskDescList::Commonfolk, );
         assert_eq!(test.race, RaceCodeList::Human, );
     }
 
@@ -97,8 +97,25 @@ mod tests {
         assert_eq!(test.partner_preference, new_partner_preference);
     }
 
+    #[test]
+    fn randomize_task_desc(){
+        let mut test = Tombstone::new();
+        let new_task_desc = TaskDescList::weighted_random();
+        test.task_desc = new_task_desc;
+        assert_eq!(test.task_desc, new_task_desc);
+    }
+
+    #[test]
+    fn task_desc_can_set_other_notes(){
+        let mut test = Tombstone::new();
+        test.task_desc = TaskDescList::UtilityMage;
+
+        test.other_notes.push(TaskDescList::get_other_note(test.task_desc));
+        let other_note_should_be = "can cast Mend, Daylight, Message, etc";
+        assert_eq!(test.other_notes[0], other_note_should_be);
+    }
+
     // randomize public_name
-    // randomize task_desc
     //
 } // mod tests
 

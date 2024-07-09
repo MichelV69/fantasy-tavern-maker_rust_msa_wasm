@@ -7,8 +7,9 @@ pub mod List {
         pub gender: GenderCodeList,
         pub partner_preference: PartnerPreferenceCodeList,
         pub public_name: &'a str,
-        pub task_desc: &'a str,
+        pub task_desc: TaskDescList,
         pub race: RaceCodeList,
+        pub other_notes: Vec<&'a str>
     }
 
     pub struct RpDetails<'a> {
