@@ -1,19 +1,22 @@
 // ---- implementations ----
 pub mod List {
-    use crate::structs::List::*;
     use crate::enums::List::*;
+    use crate::structs::List::*;
     use crate::traits::List::*;
+    use rand::distributions::{WeightedIndex,Distribution};
+    use rand::thread_rng;
+    use strum::{IntoEnumIterator,VariantArray};
 
     impl Tombstone<'_> {
         pub fn new() -> Self {
-            Tombstone{
+            Tombstone {
                 char_type: TypeCodeList::Drifter,
                 gender: GenderCodeList::Androgenous,
                 partner_preference: PartnerPreferenceCodeList::Hetro,
                 public_name: "Jane Q Publique",
                 task_desc: "Wandering Wanderer",
                 race: RaceCodeList::Human,
-             }
+            }
         }
     }
 
@@ -43,6 +46,21 @@ pub mod List {
             }
         }
     }
+
+    impl HasWeightedRandom for RaceCodeList {
+        fn weighted_random() -> Self {
+            let table_weights =
+                WeightedIndex::new(RaceCodeList::iter().map(|item| item.get_weight())).unwrap();
+            let mut rng = thread_rng();
+            let buffer = RaceCodeList::VARIANTS[table_weights.sample(&mut rng)];
+            buffer
+        }
+    }
+
+    // impl HasWeightedRandom for GenderCodeList {
+    //     fn weighted_random() -> Self {
+    //     }
+    // }
 
 } // pub mod List
 

@@ -69,18 +69,27 @@ mod tests {
     fn assign_char_type(){
         let mut test = Tombstone::new();
         let char_type = TypeCodeList::Staff;
-        test.char_type = char_type.clone();
+        test.char_type = char_type;
         assert_eq!(test.char_type, char_type );
+    }
+
+    #[test]
+    fn randomize_race(){
+         let mut test = Tombstone::new();
+         let new_race = RaceCodeList::weighted_random();
+         test.race = new_race;
+         assert_eq!(test.race, new_race);
     }
 
     // #[test]
     // fn randomize_gender(){
-    //
+    //     let mut test = Tombstone::new();
+    //     let new_gender = GenderCodeList::weighted_random();
     // }
     // randomize partner_preference
     // randomize public_name
     // randomize task_desc
-    // randomize race
+    //
 } // mod tests
 
 //--- end of file ---

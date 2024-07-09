@@ -1,12 +1,12 @@
 // --- enums
 pub mod List {
-    use strum::EnumIter;
-    use strum::Display;
+    use strum::{Display,IntoEnumIterator};
+    use strum_macros::{EnumIter,VariantArray};
     use variant_count::VariantCount;
     use rand_derive2::RandGen;
     //#[derive(RandGen, Display, VariantCount, EnumIter)]
 
-    #[derive(PartialEq, Debug, Clone)]
+    #[derive(PartialEq, Debug, Clone, Copy)]
     pub enum TypeCodeList {
         Drifter,
         Staff,
@@ -30,7 +30,7 @@ pub mod List {
         Asex,
     }
 
-    #[derive(PartialEq, Debug)]
+    #[derive(PartialEq, Debug, EnumIter, VariantArray, Clone, Copy)]
     pub enum RaceCodeList {
         Dragonborn,// 1
         Dwarf,// 5
