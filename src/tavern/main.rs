@@ -229,7 +229,6 @@ fn rocket() -> _ {
         std::env::current_dir().expect("STD ENV info").display()
     );
     rocket::build()
-        .configure(rocket::Config::figment().merge(("port", 8001)))
         .mount("/", routes![index])
         .mount("/", routes![version])
         .mount("/styles", FileServer::from("content/css"))

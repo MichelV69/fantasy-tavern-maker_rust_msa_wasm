@@ -14,10 +14,13 @@ COPY . .
 RUN cargo build --release --bin tavern
 
 # We do not need the Rust toolchain to run the binary!
-FROM debian:bookworm-slim AS runtime
+# FROM debian:bookworm-slim AS runtime
+FROM debian:bookworm AS runtime
 WORKDIR /app
 COPY content ./content
 COPY --from=builder /app/target/release/tavern .
 #CMD [ "bash" ]
+ENV ROCKET_ADDRESS=0.0.0.0
+ENV ROCKET_PORT=8000
 EXPOSE 8000
 ENTRYPOINT ["./tavern"]
