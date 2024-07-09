@@ -6,7 +6,7 @@ pub mod List {
     use rand_derive2::RandGen;
     //#[derive(RandGen, Display, VariantCount, EnumIter)]
 
-    #[derive(PartialEq, Debug)]
+    #[derive(PartialEq, Debug, Clone)]
     pub enum TypeCodeList {
         Drifter,
         Staff,

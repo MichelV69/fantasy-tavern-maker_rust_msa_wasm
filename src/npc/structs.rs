@@ -12,21 +12,21 @@ pub mod List {
     }
 
     pub struct RpDetails<'a> {
-        height_desc: &'a str,
-        build_desc: &'a str,
-        hair_color: &'a str,
-        hair_style: &'a str,
-        eye_color: &'a str,
-        quirk_emotional: &'a str,
-        quirk_physical: &'a str,
-        notable_attribute_positive: &'a str,
-        notable_attribute_negative: &'a str,
-        schtick_ability_description: &'a str,
+        pub height_desc: &'a str,
+        pub build_desc: &'a str,
+        pub hair_color: &'a str,
+        pub hair_style: &'a str,
+        pub eye_color: &'a str,
+        pub quirk_emotional: &'a str,
+        pub quirk_physical: &'a str,
+        pub notable_attribute_positive: &'a str,
+        pub notable_attribute_negative: &'a str,
+        pub schtick_ability_description: &'a str,
     }
 
     pub struct Sheet<'a> {
-        top: Tombstone<'a>,
-        bottom: RpDetails<'a>,
+        pub top: Tombstone<'a>,
+        pub bottom: RpDetails<'a>,
     }
 }
 // ---- end of file ----

@@ -65,8 +65,18 @@ mod tests {
         assert_eq!(test.race, RaceCodeList::Human, );
     }
 
-    // assign char_type
-    // randomize gender
+    #[test]
+    fn assign_char_type(){
+        let mut test = Tombstone::new();
+        let char_type = TypeCodeList::Staff;
+        test.char_type = char_type.clone();
+        assert_eq!(test.char_type, char_type );
+    }
+
+    // #[test]
+    // fn randomize_gender(){
+    //
+    // }
     // randomize partner_preference
     // randomize public_name
     // randomize task_desc
