@@ -17,6 +17,7 @@ use strum_macros::{Display, EnumString};
 
 use crate::enums::List::*;
 use crate::structs::List::*;
+use crate::traits::List::ToCapitalized;
 
 pub fn trim_whitespace(s: String) -> String {
     let words: Vec<_> = s.split_whitespace().collect();
@@ -37,24 +38,6 @@ pub fn enum_string_to_phase(s: String) -> String {
 
 pub fn tidy(s: String) -> String {
     trim_whitespace(enum_string_to_phase(s))
-}
-
-// from https://stackoverflow.com/questions/38342805/how-do-i-collect-from-multiple-iterator-types#
-pub trait ToCapitalized {
-    fn to_capitalized(&self) -> String;
-}
-impl ToCapitalized for str {
-    fn to_capitalized(&self) -> String {
-        match self.len() {
-            0 => String::new(),
-            _ => {
-                let mut s = String::with_capacity(self.len());
-                s.extend(self.chars().next().unwrap().to_uppercase());
-                s.extend(self.chars().skip(1).flat_map(|c| c.to_lowercase()));
-                s
-            }
-        }
-    }
 }
 
 // ---
@@ -492,6 +475,51 @@ pub fn get_red_light_services_list() -> Option<String> {
     }
 
     Some(red_light_services_list)
+}
+
+pub fn get_establishment_history_notes(est_name : &str) -> Vec<String> {
+    let mut pb_house_desc: Vec<String> = Vec::with_capacity(22);
+
+    pb_house_desc.push(format!(
+        "* The *{}* is {}. \n * {}. \n * {}.",
+        est_name,
+        get_establishment_history_age(),
+        get_establishment_appearance(),
+        get_establishment_reputation()
+    ));
+
+    // ---
+    pb_house_desc
+}
+
+pub fn get_redlight_services() -> Vec<String> {
+    let mut pb_house_desc: Vec<String> = Vec::with_capacity(22);
+    let red_light_services_list = get_red_light_services_list();
+    if red_light_services_list.is_some() {
+        pb_house_desc.push(format!(
+            "{}",
+            red_light_services_list.expect("Should always be String.")
+        ))
+    }
+    // ---
+    pb_house_desc
+}
+
+pub fn get_staff_and_customers() -> Vec<String> {
+    let mut pb_house_desc: Vec<String> = Vec::with_capacity(22);
+    /*
+      -----                  Notable Staff & Patrons                  -----
+    Staff : (Character) is the Owner. They are a male human; average height (3%) and
+    stout (+13%). They are hazel-eyed, with their white hair kept in long curls.
+    [GM Notes: They consider themselves hetro.  (Quirks:  They have a slight scar on
+    their right shoulder.  They are often distrustful of adventurers. ) Particularly
+    Good At: [(Int) Arcana: +2] Particularly Bad At: [(Wis) Animal Handling: -3]]
+
+    pb_house_desc.push(format!(" lore ipsum: {}", "Muspi erol");
+    */
+
+    // ---
+    pb_house_desc
 }
 
 // --- eof ---

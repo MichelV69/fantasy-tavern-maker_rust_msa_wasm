@@ -18,7 +18,7 @@ pub mod List {
     }
 
     #[derive(Debug, Serialize)]
-    pub struct PBHouse {
+    pub struct PBHouse{
         pub name: String,
         pub mood: String,
         pub lighting: String,
@@ -27,10 +27,9 @@ pub mod List {
         pub posted_sign: String,
         pub house_drink: HouseDrink,
         pub house_dish: HouseDish,
-        // establishment_history_notes: String,
-        // redlight_services: String,
         pub establishment_quality: EstablishmentQuality,
-        // cost_of_goods_index: String,
+        pub establishment_history_notes: Vec<String>,
+        pub redlight_services: Vec<String>,
     }
 
     // ---

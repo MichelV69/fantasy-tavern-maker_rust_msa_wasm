@@ -1,6 +1,8 @@
 // Rocket Routes for the App
-use crate::App;
-use crate::AppFn;
+use crate::structs::List::*;
+use crate::traits::List::*;
+use crate::implementations::List::*;
+
 use crate::PBHouse;
 use markdown::{
     to_html_with_options, CompileOptions, Constructs, LineEnding, Options, ParseOptions,
@@ -32,14 +34,14 @@ pub fn index() -> (ContentType, String) {
     context.insert("pb_general_info", &pb_general_info);
 
     let history_profile: Vec<String> = this_pb
-        .history_profile()
+        .establishment_history_notes
         .into_iter()
         .map(|line| markdown::to_html(&line))
         .collect();
     context.insert("pb_history_profile", &history_profile);
 
     let redlight_profile: Vec<String> = this_pb
-        .redlight_profile()
+        .redlight_services
         .into_iter()
         .map(|line| markdown::to_html(&line))
         .collect();
